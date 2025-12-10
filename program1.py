@@ -34,8 +34,8 @@ def solution(n: int, m: int, a: list[list]):
                 else:
                     up += 1
                 if left > 0 and up > 0:
-                    print("NO")
-                    exit(0)
+                    return 0
+
                 elif left > 0:
                     ans = 1
                 else:
@@ -62,14 +62,13 @@ def solution(n: int, m: int, a: list[list]):
                     right += 1
 
                 if left > 0 and right > 0:
-                    print("NO")
-                    exit(0)
+                    return 0
+
                 elif up > 0 and down > 0:
-                    print("NO")
-                    exit(0)
+                    return 0
+
                 elif (down > 0 and i == n-1) or (up > 0 and i == 0) or (left > 0 and j == 0) or (right > 0 and j == m-1):
-                    print("NO")
-                    exit(0)
+                    return 0
                 elif up > 0 and right > 0:
                     ans = 4
                 elif up > 0 and left > 0:
@@ -79,6 +78,4 @@ def solution(n: int, m: int, a: list[list]):
                 elif down > 0 and left > 0:
                     ans = 6
             a[i][j] = ans
-    print("YES")
-    for i in a:
-        print(*i)
+    return 1, a
