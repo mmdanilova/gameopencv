@@ -32,9 +32,10 @@ while running:
     else:
         screen.fill((0, 0, 0))
 
-    pygame.draw.rect(screen, square_color,
-                     (square_x, square_y, square_size, square_size),
-                     square_thickness)
+    image = pygame.image.load('squere.jpg')
+    x,  y = image.get_size()
+    image = pygame.transform.scale(image, (x//2, y//2))
+    screen.blit(image, (400, 200))
 
     pygame.display.flip()
     clock.tick(60)
