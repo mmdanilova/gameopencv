@@ -5,3 +5,4 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q') or not ret:
         break
     cv2.imshow("Hands", frame)
+print("Y")
