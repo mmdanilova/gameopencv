@@ -23,12 +23,19 @@ while running:
             running = False
 
     ret, frame = cap.read()
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    frame_resized = cv2.resize(frame_rgb, (WIDTH, HEIGHT))
-    frame_transposed = np.transpose(frame_resized, (1, 0, 2))
-    frame_surface = pygame.surfarray.make_surface(frame_transposed)
-    screen.blit(frame_surface, (0, 0))
+    if ret:
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame_resized = cv2.resize(frame_rgb, (WIDTH, HEIGHT))
+        frame_transposed = np.transpose(frame_resized, (1, 0, 2))
+        frame_surface = pygame.surfarray.make_surface(frame_transposed)
+        screen.blit(frame_surface, (0, 0))
+    else:
+        screen.fill((0, 0, 0))
 
+    image = pygame.image.load('squere.jpg')
+    x,  y = image.get_size()
+    image = pygame.transform.scale(image, (x//2, y//2))
+    screen.blit(image, (400, 200))
 
     pygame.display.flip()
     clock.tick(60)
