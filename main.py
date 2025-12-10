@@ -4,4 +4,4 @@ while True:
     ret, frame = cap.read()
     if cv2.waitKey(1) & 0xFF == ord('q') or not ret:
         break
-    cv2.imshow("Водпровод", frame)
+    cv2.imshow("Vodoprovod", frame)
