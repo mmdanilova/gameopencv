@@ -7,27 +7,25 @@
 # 5 - трубавниз вправо
 # 6 - трубавниз влево
 
-def solution(n: int, m: int, a: list[list]):
-    for i in range(n):
-        a.append(list(map(int, input().split())))
-
+def solution(n: int, m: int, a1: list[list]):
+    a2 = a1.copy()
     for i in range(n):
         for j in range(m):
             ans = -1
-            if a[i][j] == 0:
+            if a2[i][j] == 0:
                 ans = 0
-            elif a[i][j] == 1 or a[i][j] == 2:
+            elif a2[i][j] == 1 or a2[i][j] == 2:
                 up = 0
                 left = 0
                 if i > 0:
-                    if a[i-1][j] == 3 or a[i-1][j] == 4 or a[i-1][j] == 0 or a[i-1][j] == 1:
+                    if a2[i - 1][j] == 3 or a2[i - 1][j] == 4 or a2[i - 1][j] == 0 or a2[i - 1][j] == 1:
                         left += 1
                     else:
                         up += 1
                 else:
                     left += 1
                 if j-1 >= 0:
-                    if a[i][j-1] == 1 or a[i][j-1] == 4 or a[i][j-1] == 5:
+                    if a2[i][j - 1] == 1 or a2[i][j - 1] == 4 or a2[i][j - 1] == 5:
                         left += 1
                     else:
                         up += 1
@@ -46,7 +44,7 @@ def solution(n: int, m: int, a: list[list]):
                 left = 0
                 right = 0
                 if i > 0:
-                    if a[i-1][j] == 1 or a[i-1][j] == 3 or a[i-1][j] == 4 or a[i-1][j] == 0:
+                    if a2[i - 1][j] == 1 or a2[i - 1][j] == 3 or a2[i - 1][j] == 4 or a2[i - 1][j] == 0:
                         down += 1
                     else:
                         up += 1
@@ -54,7 +52,7 @@ def solution(n: int, m: int, a: list[list]):
                     down += 1
 
                 if j-1 >= 0:
-                    if a[i][j-1] == 2 or a[i][j-1] == 3 or a[i][j-1] == 6 or a[i][j-1] == 0:
+                    if a2[i][j - 1] == 2 or a2[i][j - 1] == 3 or a2[i][j - 1] == 6 or a2[i][j - 1] == 0:
                         right += 1
                     else:
                         left += 1
@@ -77,5 +75,5 @@ def solution(n: int, m: int, a: list[list]):
                     ans = 5
                 elif down > 0 and left > 0:
                     ans = 6
-            a[i][j] = ans
-    return 1, a
+            a2[i][j] = ans
+    return a2
