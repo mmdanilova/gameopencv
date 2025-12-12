@@ -65,7 +65,8 @@ def solution(n: int, m: int, a1: list[list]):
                 elif up > 0 and down > 0:
                     return 0
 
-                elif (down > 0 and i == n-1) or (up > 0 and i == 0) or (left > 0 and j == 0) or (right > 0 and j == m-1):
+                elif ((down > 0 and i == n-1) or (up > 0 and i == 0) or (left > 0 and j == 0)
+                      or (right > 0 and j == m-1)):
                     return 0
                 elif up > 0 and right > 0:
                     ans = 4
