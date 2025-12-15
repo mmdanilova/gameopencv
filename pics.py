@@ -16,4 +16,5 @@ pipe_t5 = pygame.transform.rotate(pipe_t6, 90)
 pipe_t4 = pygame.transform.rotate(pipe_t6, 180)
 pipe_t3 = pygame.transform.rotate(pipe_t6, 270)
 
+# список картинок труб
 pic = [1e9, pipe_t1, pipe_t2, pipe_t3, pipe_t4, pipe_t5, pipe_t6]
