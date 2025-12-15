@@ -46,6 +46,9 @@ cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
 running = True
 
+key = pygame.image.load("key.png")
+key = pygame.transform.scale(key, (50, 50))
+key = picture(key, 400, 200, 0, 50, 50)
 image = pics.pipe_t4
 x, y = image.get_size()
 image = pygame.transform.scale(image, (x//2, y//2))
@@ -64,7 +67,7 @@ while running:
     if results.multi_handedness:
         object_index, x, y = get_object(results, objects)
         if x and y:
-            pygame.draw.circle(screen, (255, 0, 0), (x, y), 10)
+            screen.blit(key.image, (x, y))
 
         for i in range(len(results.multi_handedness)):
             if "Right" in str(results.multi_handedness[i]):
