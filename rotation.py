@@ -14,18 +14,18 @@ def get_object(res, objs):
                     on_index = j
     return on_index, xk, yk
 
+def drawing(screen, object):
+    screen.fill((0, 0, 0))
+    for obj in object:
+        imag = pygame.transform.rotate(obj.image, obj.angle)
+        screen.blit(imag, (obj.x, obj.y))
+
 def get_hands():
     ret, frame = cap.read()
     flipped = np.fliplr(frame)
     flippedRGB = cv2.cvtColor(flipped, cv2.COLOR_BGR2RGB)
     results = handsDetector.process(flippedRGB)
     return results
-
-def drawing(screen, object):
-    screen.fill((0, 0, 0))
-    for obj in object:
-        imag = pygame.transform.rotate(obj.image, obj.angle)
-        screen.blit(imag, (obj.x, obj.y))
 
 class picture:
     def __init__(self, img, x, y, angle, width, height):
@@ -54,6 +54,7 @@ w, h = image.get_size()
 image = pygame.transform.scale(image, (w, h))
 imag = picture(image, 100, 100, 0, w, h)
 
+objects = [imag]
 
 while running:
     for event in pygame.event.get():
