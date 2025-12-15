@@ -16,7 +16,7 @@ handsDetector = mp.solutions.hands.Hands()
 cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
 running = True
-image = pygame.image.load('pipe.png')
+image = pygame.image.load('pipes1_v10.png')
 x, y = image.get_size()
 image = pygame.transform.scale(image, (x//2, y//2))
 imag = picture(image, 100, 100, 0, x, y)
@@ -68,7 +68,7 @@ while running:
                     objects[on_index].angle = math.degrees(angle)
 
     pygame.display.flip()
-    clock.tick(5)
+    clock.tick(30)
 
 handsDetector.close()
 pygame.quit()
