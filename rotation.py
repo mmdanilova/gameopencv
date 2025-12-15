@@ -45,27 +45,23 @@ cap = cv2.VideoCapture(0)
 
 clock = pygame.time.Clock()
 running = True
-<<<<<<< HEAD
-image = pygame.image.load('pipes1_v10.png')
-=======
 
 key = pygame.image.load("key.png")
 key = pygame.transform.scale(key, (50, 50))
 key = picture(key, 400, 200, 0, 50, 50)
-image = pics.pipe_t4
->>>>>>> f1dd89545e218c5324e9a42545e6993fe83c229f
-x, y = image.get_size()
-image = pygame.transform.scale(image, (x//2, y//2))
-imag = picture(image, 100, 100, 0, x, y)
+image = pics.pipe_t3
+w, h = image.get_size()
+image = pygame.transform.scale(image, (w, h))
+imag = picture(image, 100, 100, 0, w, h)
 
-objects = [imag]
 
 while running:
-    results = get_hands()
-    drawing(screen, objects)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    results = get_hands()
+    drawing(screen, objects)
 
     object_index = None
     if results.multi_handedness:
@@ -85,11 +81,7 @@ while running:
                     objects[object_index].angle = -(math.degrees(angle) + 45) // 90 * 90
 
     pygame.display.flip()
-<<<<<<< HEAD
-    clock.tick(30)
-=======
     clock.tick(120)
->>>>>>> f1dd89545e218c5324e9a42545e6993fe83c229f
 
 handsDetector.close()
 pygame.quit()
