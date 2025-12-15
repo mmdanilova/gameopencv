@@ -1,4 +1,5 @@
-import cv2, mediapipe as mp, numpy as np, pygame, math, time
+import cv2, mediapipe as mp, numpy as np, pygame, math
+import pics
 
 def get_object(res, objs):
     on_index = None
@@ -26,8 +27,6 @@ def drawing(screen, object):
         imag = pygame.transform.rotate(obj.image, obj.angle)
         screen.blit(imag, (obj.x, obj.y))
 
-
-
 class picture:
     def __init__(self, img, x, y, angle, width, height):
         self.image = img
@@ -47,7 +46,7 @@ cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
 running = True
 
-image = pygame.image.load('pipe.png')
+image = pics.pipe_t4
 x, y = image.get_size()
 image = pygame.transform.scale(image, (x//2, y//2))
 imag = picture(image, 100, 100, 0, x, y)
@@ -73,8 +72,6 @@ while running:
                 y1 = int(results.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
                 x2 = int(results.multi_hand_landmarks[i].landmark[0].x * WIDTH)
                 y2 = int(results.multi_hand_landmarks[i].landmark[0].y * HEIGHT)
-                pygame.draw.circle(screen, (255, 0, 0), (x1, y1), 5)
-                pygame.draw.circle(screen, (255, 0, 0), (x2, y2), 5)
                 x, y = x1-x2, y1-y2
                 angle = math.atan2(y, x)
                 if object_index is not None:
