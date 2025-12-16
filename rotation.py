@@ -1,88 +1,69 @@
-import cv2, mediapipe as mp, numpy as np, pygame, math
+import cv2
 import pics
+import config
+import numpy as np
+
 
 def get_object(res, objs):
     on_index = None
     xk, yk = None, None
     for i in range(len(res.multi_handedness)):
         if "Left" in str(res.multi_handedness[i]):
-            xk = int(res.multi_hand_landmarks[i].landmark[8].x * WIDTH)
-            yk = int(res.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
+            xk = int(res.multi_hand_landmarks[i].landmark[8].x * config.WIDTH)
+            yk = int(res.multi_hand_landmarks[i].landmark[8].y * config.HEIGHT)
             for j in range(len(objs)):
                 elem = objs[j]
                 if elem.x <= xk < elem.x + elem.width and elem.y <= yk < elem.y + elem.height:
                     on_index = j
     return on_index, xk, yk
 
-def drawing(screen, object):
-    screen.fill((0, 0, 0))
-    for obj in object:
-        imag = pygame.transform.rotate(obj.image, obj.angle)
-        screen.blit(imag, (obj.x, obj.y))
+def drawing(screen, objects):
+    screen.fill((102, 100, 105))
+    for obj in objects:
+        screen.blit(obj.image, (obj.x, obj.y))
+def check_solution(now, ans):
+    if now == ans:
+        return 1
+    else:
+        return 0
 
-def get_hands():
+def get_hands(cap, handsDetector):
     ret, frame = cap.read()
     flipped = np.fliplr(frame)
     flippedRGB = cv2.cvtColor(flipped, cv2.COLOR_BGR2RGB)
     results = handsDetector.process(flippedRGB)
     return results
 
-class picture:
-    def __init__(self, img, x, y, angle, width, height):
-        self.image = img
-        self.x = x
-        self.y = y
-        self.angle = angle
-        self.width = width
-        self.height = height
+def f(array):
+    objects = []
+    for i in range(len(array)):
+        for j in range(len(array[i])):
+            if array[i][j] == 1 or array[i][j] == 2:
+                objects.append(pics.picture(pics.pipe_t1, j * 100 + 50, i * 100 + 50, 100, 100, 1))
+            elif array[i][j] == 0:
+                pass
+            else:
+                objects.append(pics.picture(pics.pipe_t3, j * 100 + 50, i * 100 + 50, 100, 100, 3))
+    return objects
 
-pygame.init()
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
-handsDetector = mp.solutions.hands.Hands()
-cap = cv2.VideoCapture(0)
-
-clock = pygame.time.Clock()
-running = True
-
-key = pygame.image.load("key.png")
-key = pygame.transform.scale(key, (50, 50))
-key = picture(key, 400, 200, 0, 50, 50)
-image = pics.pipe_t3
-w, h = image.get_size()
-image = pygame.transform.scale(image, (w, h))
-imag = picture(image, 100, 100, 0, w, h)
-
-objects = [imag]
-
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    results = get_hands()
-    drawing(screen, objects)
-
-    object_index = None
-    if results.multi_handedness:
-        object_index, x, y = get_object(results, objects)
-        if x and y:
-            screen.blit(key.image, (x, y))
-
-        for i in range(len(results.multi_handedness)):
-            if "Right" in str(results.multi_handedness[i]):
-                x1 = int(results.multi_hand_landmarks[i].landmark[8].x * WIDTH)
-                y1 = int(results.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
-                x2 = int(results.multi_hand_landmarks[i].landmark[0].x * WIDTH)
-                y2 = int(results.multi_hand_landmarks[i].landmark[0].y * HEIGHT)
-                x, y = x1-x2, y1-y2
-                angle = math.atan2(y, x)
-                if object_index is not None:
-                    objects[object_index].angle = -(math.degrees(angle) + 45) // 90 * 90
-
-    pygame.display.flip()
-    clock.tick(120)
-
-handsDetector.close()
-pygame.quit()
+def change_rotation(angle, objects, object_index):
+    if objects[object_index].pipe_type == 1 or objects[object_index].pipe_type == 2:
+        if abs(angle) == 0 or abs(angle) == 180:
+            objects[object_index].pipe_type = 2
+            objects[object_index].image = pics.pic[objects[object_index].pipe_type]
+        else:
+            objects[object_index].pipe_type = 1
+            objects[object_index].image = pics.pic[objects[object_index].pipe_type]
+    elif objects[object_index].pipe_type != 0:
+        if abs(angle) == 0:
+            objects[object_index].pipe_type = 3
+            objects[object_index].image = pics.pic[objects[object_index].pipe_type]
+        if abs(angle) == 90:
+            objects[object_index].pipe_type = 5
+            objects[object_index].image = pics.pic[objects[object_index].pipe_type]
+        if abs(angle) == 180:
+            objects[object_index].pipe_type = 6
+            objects[object_index].image = pics.pic[objects[object_index].pipe_type]
+        if abs(angle) == 270:
+            objects[object_index].pipe_type = 4
+            objects[object_index].image = pics.pic[objects[object_index].pipe_type]

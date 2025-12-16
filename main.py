@@ -1,76 +1,27 @@
-from program3 import *  # from program1 import *
-import pics, mediapipe as mp, cv2, math, numpy as np
+from program3 import *  # from program1 import, import pics *, import numpy as np
+from rotation import *
+import mediapipe as mp
+import cv2
+import math
 
-def get_object(res, objs):
-    on_index = None
-    xk, yk = None, None
-    for i in range(len(res.multi_handedness)):
-        if "Left" in str(res.multi_handedness[i]):
-            xk = int(res.multi_hand_landmarks[i].landmark[8].x * WIDTH)
-            yk = int(res.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
-            for j in range(len(objs)):
-                elem = objs[j]
-                if elem.x - 25 <= xk < elem.x + elem.width + 25 and elem.y - 25 <= yk < elem.y + elem.height + 25:
-                    on_index = j
-    return on_index, xk, yk
-
-def get_hands():
-    ret, frame = cap.read()
-    flipped = np.fliplr(frame)
-    flippedRGB = cv2.cvtColor(flipped, cv2.COLOR_BGR2RGB)
-    results = handsDetector.process(flippedRGB)
-    return results
-
-class picture:
-    def __init__(self, img, x, y, angle, width, height):
-        self.image = img
-        self.x = x
-        self.y = y
-        self.angle = angle
-        self.width = width
-        self.height = height
 
 pygame.init()
-WIDTH, HEIGHT = 1100, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-a = [[3, 1, 1, 1, 1, 1, 1, 1, 1, 3], [1, 3, 1, 1, 1, 1, 1, 1, 3, 1], [1, 1, 0, 0, 0, 0, 0, 0, 1, 1],
-     [1, 3, 1, 1, 1, 1, 1, 1, 3, 1], [3, 1, 1, 1, 1, 1, 1, 1, 1, 3]]
-
+screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
+a = [[3, 1, 1, 1, 3], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [3, 1, 1, 1, 3]]
+a_copy = [[3, 1, 1, 1, 3], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [3, 1, 1, 1, 3]]
+a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
 handsDetector = mp.solutions.hands.Hands()
 cap = cv2.VideoCapture(0)
-
 clock = pygame.time.Clock()
 running = True
-
-key = pygame.image.load("key.png")
-key = pygame.transform.scale(key, (50, 50))
-key = picture(key, 400, 200, 0, 50, 50)
-
-objects = []
-for i in range(len(a)):
-    for j in range(len(a[i])):
-        if a[i][j] == 1:
-            image = pics.pipe_t1
-            w, h = image.get_size()
-            imag = picture(image, 100 * j + 35, 100 * i + 35, 0, w, h)
-            objects.append(imag)
-        else:
-            image = pics.pipe_t3
-            w, h = image.get_size()
-            imag = picture(image, 100 * j + 35, 100 * i + 35, 0, w, h)
-            objects.append(imag)
-
+objects = f(a)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    results = get_hands()
-    screen.fill((0, 0, 0))
-    for obj in objects:
-        imag = pygame.transform.rotate(obj.image, obj.angle)
-        screen.blit(imag, (obj.x, obj.y))
-
+    results = get_hands(cap, handsDetector)
+    drawing(screen, objects)
     object_index = None
     if results.multi_handedness:
         object_index, x, y = get_object(results, objects)
@@ -85,9 +36,12 @@ while running:
                 y2 = int(results.multi_hand_landmarks[i].landmark[0].y * HEIGHT)
                 x, y = x1 - x2, y1 - y2
                 angle = math.atan2(y, x)
-                if object_index is not None:
-                    objects[object_index].angle = -(math.degrees(angle) + 45) // 90 * 90
 
+                if object_index is not None:
+                    r_angle = -(math.degrees(angle) + 45) // 90 * 90
+                    change_rotation(r_angle, objects, object_index)
+    if check_solution(a, a_ans):
+        running = 1
     pygame.display.flip()
     clock.tick(120)
 
