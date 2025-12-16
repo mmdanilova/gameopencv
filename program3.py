@@ -127,9 +127,9 @@ def instruction(screen):
         screen.blit(key, (730, 400))
         screen.blit(hand3, (620, 300))
 
-        if results.multi_hand_landmarks is not None:
+        #if results.multi_hand_landmarks is not None:
             # тут нужно дописать определение руки
-            if check_paper(0, results, flippedRGB) == 1:
+            #if check_paper(0, results, flippedRGB) == 1:
 
         pygame.display.flip()
         clock.tick(120)
