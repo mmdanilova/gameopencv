@@ -56,13 +56,13 @@ def change_rotation(angle, objects, object_index):
             objects[object_index].image = pics.pic[objects[object_index].pipe_type]
     elif objects[object_index].pipe_type != 0:
         if abs(angle) == 0:
-            objects[object_index].pipe_type = 3
-            objects[object_index].image = pics.pic[objects[object_index].pipe_type]
-        if abs(angle) == 90:
             objects[object_index].pipe_type = 5
             objects[object_index].image = pics.pic[objects[object_index].pipe_type]
-        if abs(angle) == 180:
+        if abs(angle) == 90:
             objects[object_index].pipe_type = 6
+            objects[object_index].image = pics.pic[objects[object_index].pipe_type]
+        if abs(angle) == 180:
+            objects[object_index].pipe_type = 3
             objects[object_index].image = pics.pic[objects[object_index].pipe_type]
         if abs(angle) == 270:
             objects[object_index].pipe_type = 4
