@@ -13,8 +13,10 @@ a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
 handsDetector = mp.solutions.hands.Hands()
 cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
-running = True
+running = 0
 objects = f(a)
+win = 0
+instruction(screen)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -26,7 +28,7 @@ while running:
     if results.multi_handedness:
         object_index, x, y = get_object(results, objects)
         if x and y:
-            screen.blit(key.image, (x, y))
+            screen.blit(key1.image, (x, y))
 
         for i in range(len(results.multi_handedness)):
             if "Right" in str(results.multi_handedness[i]):
@@ -41,9 +43,12 @@ while running:
                     r_angle = -(math.degrees(angle) + 45) // 90 * 90
                     change_rotation(r_angle, objects, object_index)
     if check_solution(a, a_ans):
-        running = 1
+        running = 0
+        win = 1
     pygame.display.flip()
     clock.tick(120)
 
+if win:
+    you_win(screen)
 handsDetector.close()
 pygame.quit()

@@ -2,20 +2,7 @@ import cv2
 import pics
 import config
 import numpy as np
-
-
-def get_object(res, objs):
-    on_index = None
-    xk, yk = None, None
-    for i in range(len(res.multi_handedness)):
-        if "Left" in str(res.multi_handedness[i]):
-            xk = int(res.multi_hand_landmarks[i].landmark[8].x * config.WIDTH)
-            yk = int(res.multi_hand_landmarks[i].landmark[8].y * config.HEIGHT)
-            for j in range(len(objs)):
-                elem = objs[j]
-                if elem.x <= xk < elem.x + elem.width and elem.y <= yk < elem.y + elem.height:
-                    on_index = j
-    return on_index, xk, yk
+import math
 
 def drawing(screen, objects):
     screen.fill((102, 100, 105))
@@ -45,6 +32,7 @@ def f(array):
             else:
                 objects.append(pics.picture(pics.pipe_t3, j * 100 + 50, i * 100 + 50, 100, 100, 3))
     return objects
+
 
 def change_rotation(angle, objects, object_index):
     if objects[object_index].pipe_type == 1 or objects[object_index].pipe_type == 2:
