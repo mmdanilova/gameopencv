@@ -56,10 +56,12 @@ def get_object(res, objs):
         if "Left" in str(res.multi_handedness[i]):
             xk = int(res.multi_hand_landmarks[i].landmark[8].x * config.WIDTH)
             yk = int(res.multi_hand_landmarks[i].landmark[8].y * config.HEIGHT)
-            for j in range(len(objs)):
-                elem = objs[j]
-                if elem.x <= xk < elem.x + elem.width and elem.y <= yk < elem.y + elem.height:
-                    on_index = j
+            for x in range(len(objs)):
+                for y in range(len(objs[x])):
+                    elem = objs[x][y]
+                    if elem != 0:
+                        if elem.x <= xk < elem.x + elem.width and elem.y <= yk < elem.y + elem.height:
+                            on_index = [x, y]
     return on_index, xk, yk
 
 def draw_cur(now: list[list]):
@@ -91,6 +93,25 @@ def you_win(screen):
         pygame.display.flip()
         clock.tick(120)
     pygame.quit()
+
+def left_and_right(hands):
+    rl, ri, li  = False, None, None
+    for i in range(len(hands)):
+        if "Right" in str(hands[i]):
+            ri = i
+        else:
+            li = i
+    if ri is not None and li is not None:
+        rl = True
+    return rl, ri, li
+
+def give_up(results, flippedRGB):
+    if results.multi_hand_landmarks is not None and len(results.multi_hand_landmarks) >= 2:
+        r_and_l, r_index, l_index = left_and_right(results.multi_handedness)
+        if r_and_l:
+            if check_paper(r_index, results, flippedRGB) == 1 and check_paper(l_index, results, flippedRGB) == 1:
+                return True
+    return False
 
 def instruction(screen):
     clock = pygame.time.Clock()
@@ -147,9 +168,8 @@ def show_ans(now: list[list], ans: list[list]):  # ресует процесс �
         for i in range(len(now)):
             for j in range(len(now[i])):
                 if now[i][j] != 0:
-                    screen.blit(pic[now[i][j]], (j * 100 + 50, i * 100 + 50))
-        while ind[0] < len(now) and ind[1] < len(now[0]) and (now[ind[0]][ind[1]] == 0
-                                                              or now[ind[0]][ind[1]] == ans[ind[0]][ind[1]]):
+                    screen.blit(pic[now[i][j].pipe_type], (j * 100 + 50, i * 100 + 50))
+        while ind[0] < len(now) and ind[1] < len(now[0]) and (now[ind[0]][ind[1]].pipe_type == 0 or now[ind[0]][ind[1]].pipe_type == ans[ind[0]][ind[1]]):
             if ind[0] < len(now) and ind[1] < len(now[0]):
                 if now[ind[0]][ind[1]] == ans[ind[0]][ind[1]]:
                     if ind[1] + 1 < len(now[0]):
@@ -159,20 +179,20 @@ def show_ans(now: list[list], ans: list[list]):  # ресует процесс �
             else:
                 break
         if ind[0] < len(now) and ind[1] < len(now[0]):
-            if now[ind[0]][ind[1]] == ans[ind[0]][ind[1]]:
+            if now[ind[0]][ind[1]].pipe_type == ans[ind[0]][ind[1]]:
                 if ind[1] + 1 < len(now[0]):
                     ind = (ind[0], ind[1] + 1)
                 else:
                     ind = (ind[0] + 1, 0)
             else:
-                if now[ind[0]][ind[1]] == 1 or now[ind[0]][ind[1]] == 2:
-                    now[ind[0]][ind[1]] = now[ind[0]][ind[1]] + 1
-                    if now[ind[0]][ind[1]] > 2:
-                        now[ind[0]][ind[1]] = 1
-                elif now[ind[0]][ind[1]] > 2:
-                    now[ind[0]][ind[1]] = now[ind[0]][ind[1]] + 1
-                    if now[ind[0]][ind[1]] > 6:
-                        now[ind[0]][ind[1]] = 3
+                if now[ind[0]][ind[1]].pipe_type == 1 or now[ind[0]][ind[1]].pipe_type == 2:
+                    now[ind[0]][ind[1]].pipe_type = now[ind[0]][ind[1]].pipe_type + 1
+                    if now[ind[0]][ind[1]].pipe_type > 2:
+                        now[ind[0]][ind[1]].pipe_type = 1
+                elif now[ind[0]][ind[1]].pipe_type > 2:
+                    now[ind[0]][ind[1]].pipe_type = now[ind[0]][ind[1]].pipe_type + 1
+                    if now[ind[0]][ind[1]].pipe_type > 6:
+                        now[ind[0]][ind[1]].pipe_type = 3
 
         pygame.display.flip()
         clock.tick(5)
