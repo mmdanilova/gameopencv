@@ -9,10 +9,7 @@ def drawing(screen, objects):
     for obj in objects:
         screen.blit(obj.image, (obj.x, obj.y))
 def check_solution(now, ans):
-    for i in range(len(now)):
-        if now[i].pipe_type != ans[i//4][i%4]:
-            return False
-    return True
+    return False
 
 def get_hands(cap, handsDetector):
     ret, frame = cap.read()

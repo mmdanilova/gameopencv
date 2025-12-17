@@ -130,7 +130,7 @@ def instruction(screen):
         if results.multi_hand_landmarks is not None:
             if check_paper(0, results, flippedRGB) == 1:
                 running = False
-
+                return
         pygame.display.flip()
         clock.tick(120)
     pygame.quit()
