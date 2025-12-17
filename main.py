@@ -13,16 +13,16 @@ a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
 handsDetector = mp.solutions.hands.Hands()
 cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
-running = True
+running = 1
 objects = f(a)
 win = 0
-instruction(screen)
+#instruction(screen)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    results, _ = get_hands(cap, handsDetector)
+    results = get_hands(cap, handsDetector)
     drawing(screen, objects)
     object_index = None
     if results.multi_handedness:
@@ -36,17 +36,18 @@ while running:
                 y1 = int(results.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
                 x2 = int(results.multi_hand_landmarks[i].landmark[0].x * WIDTH)
                 y2 = int(results.multi_hand_landmarks[i].landmark[0].y * HEIGHT)
+                ex = int(results.multi_hand_landmarks[i].landmark[12].x * WIDTH)
+                ey = int(results.multi_hand_landmarks[i].landmark[12].y * HEIGHT)
                 x, y = x1 - x2, y1 - y2
                 angle = math.atan2(y, x)
-                if abs(x1 - x2) + abs(y1 - y2) > 125:
+                if abs(ex - x2) + abs(ey - y2) > 150 and abs(ex - x1) + abs(ey - y1) > 150:
                     if object_index is not None:
                         r_angle = (math.degrees(angle) + 45) // 90 * 90
                         if r_angle < 0:
                             r_angle += 360
                         change_rotation(r_angle, objects, object_index)
-
-    if check_solution(objects, a_ans):
-        running = False
+    if check_solution(a, a_ans):
+        running = 0
         win = 1
     pygame.display.flip()
     clock.tick(120)
