@@ -19,7 +19,7 @@ def get_hands(cap, handsDetector):
     flipped = np.fliplr(frame)
     flippedRGB = cv2.cvtColor(flipped, cv2.COLOR_BGR2RGB)
     results = handsDetector.process(flippedRGB)
-    return results
+    return results, flippedRGB
 
 def f(array):
     objects = []

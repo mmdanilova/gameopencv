@@ -112,7 +112,7 @@ def instruction(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        results = get_hands(cap, handsDetector)
+        results, flippedRGB = get_hands(cap, handsDetector)
         screen.fill((102, 100, 105))
         screen.blit(txt_surface1, (100, 100))
         screen.blit(txt_surface2, (100, 150))
@@ -127,9 +127,10 @@ def instruction(screen):
         screen.blit(key, (730, 400))
         screen.blit(hand3, (620, 300))
 
-        #if results.multi_hand_landmarks is not None:
-            # тут нужно дописать определение руки
-            #if check_paper(0, results, flippedRGB) == 1:
+        if results.multi_hand_landmarks is not None:
+            for i in range(len(results.multi_hand_landmarks)):
+                if check_paper(0, results, flippedRGB) == 1:
+                    return
 
         pygame.display.flip()
         clock.tick(120)
