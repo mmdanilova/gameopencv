@@ -36,18 +36,16 @@ while running:
                 y1 = int(results.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
                 x2 = int(results.multi_hand_landmarks[i].landmark[0].x * WIDTH)
                 y2 = int(results.multi_hand_landmarks[i].landmark[0].y * HEIGHT)
-                ex = int(results.multi_hand_landmarks[i].landmark[12].x * WIDTH)
-                ey = int(results.multi_hand_landmarks[i].landmark[12].y * HEIGHT)
                 x, y = x1 - x2, y1 - y2
                 angle = math.atan2(y, x)
-                if abs(ex - x2) + abs(ey - y2) > 150:
+                if abs(x1 - x2) + abs(y1 - y2) > 125:
                     if object_index is not None:
                         r_angle = (math.degrees(angle) + 45) // 90 * 90
                         if r_angle < 0:
                             r_angle += 360
                         change_rotation(r_angle, objects, object_index)
 
-    if check_solution(a, a_ans):
+    if check_solution(objects, a_ans):
         running = False
         win = 1
     pygame.display.flip()
