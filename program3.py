@@ -26,7 +26,7 @@ def get_point(landmark, shape, i):
 def size(landmark, shape, i, j):
     x1, y1 = landmark[i].x * shape[1], landmark[i].y * shape[0]
     x2, y2 = landmark[j].x * shape[1], landmark[j].y * shape[0]
-    return ((x1 - x2)**2 + (y1 - y2) **2) **.5
+    return ((x1 - x2)**2 + (y1 - y2) **2) ** 0.5
 
 def check_circle(xp, yp, xc, yc, r, flippedRGB):
     new_r = math.hypot(abs(xp-xc), abs(yp - yc))
@@ -45,7 +45,7 @@ def check_paper(i, results, flippedRGB):
     for j in a:
         x1, y1 = get_point(results.multi_hand_landmarks[i].landmark, flippedRGB.shape, j)
         ws = size(results.multi_hand_landmarks[i].landmark, flippedRGB.shape, 0, 5)
-        if check_circle(x1, y1, x, y, r) != 1 or r*2/ws < 1.8:
+        if check_circle(x1, y1, x, y, r, flippedRGB) != 1 or r*2/ws < 1.8:
             return 0
     return 1
 
