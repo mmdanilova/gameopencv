@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 running = 1
 objects = f(a)
 win = 0
-#instruction(screen)
+instruction(screen)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

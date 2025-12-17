@@ -9,17 +9,17 @@ def drawing(screen, objects):
     for obj in objects:
         screen.blit(obj.image, (obj.x, obj.y))
 def check_solution(now, ans):
-    if now == ans:
-        return 1
-    else:
-        return 0
+    for i in range(len(now)):
+        if now[i].pipe_type != ans[i//4][i%4]:
+            return False
+    return True
 
 def get_hands(cap, handsDetector):
     ret, frame = cap.read()
     flipped = np.fliplr(frame)
     flippedRGB = cv2.cvtColor(flipped, cv2.COLOR_BGR2RGB)
     results = handsDetector.process(flippedRGB)
-    return results
+    return results, flippedRGB
 
 def f(array):
     objects = []
