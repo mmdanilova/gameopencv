@@ -13,7 +13,7 @@ a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
 handsDetector = mp.solutions.hands.Hands()
 cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
-running = 0
+running = 1
 objects = f(a)
 win = 0
 #instruction(screen)
