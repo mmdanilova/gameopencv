@@ -16,6 +16,7 @@ cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
 running = 1
 objects = f(a)
+showing_ans = False
 win = 0
 instruction(screen)
 while running:
@@ -23,7 +24,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    results, _ = get_hands(cap, handsDetector)
+    results, fRGB = get_hands(cap, handsDetector)
     drawing(screen, objects)
     object_index = None
     if results.multi_handedness:
@@ -45,13 +46,18 @@ while running:
                         if r_angle < 0:
                             r_angle += 360
                         change_rotation(r_angle, objects, object_index)
-    if check_solution(a, a_ans):
-        running = 0
-        win = 1
+    if give_up(results, fRGB):
+        running = False
+        showing_ans = True
+    if check_solution(objects, a_ans):
+        running = False
+        win = True
     pygame.display.flip()
     clock.tick(120)
 
 if win:
     you_win(screen)
+if showing_ans:
+    show_ans(objects, a_ans)
 handsDetector.close()
 pygame.quit()

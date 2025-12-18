@@ -6,7 +6,7 @@ import sys
 pygame.init()
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 square_size = 100
 square_x = 100
 square_y = 100
