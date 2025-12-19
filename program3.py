@@ -156,12 +156,10 @@ def instruction(screen):
         clock.tick(120)
     pygame.quit()
 
-def show_ans(now: list[list], ans: list[list]):  # ресует процесс получения из данного состояния правильные трубы
+def show_ans(now: list[list], ans: list[list], now_time):  # ресует процесс получения из данного состояния правильные трубы
     i, j = 0, 0
     clock = pygame.time.Clock()
     running = 1
-    print(now, ans)
-    print("show_ans")
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -188,6 +186,6 @@ def show_ans(now: list[list], ans: list[list]):  # ресует процесс �
                     if now[i][j].pipe_type > 6:
                         now[i][j].pipe_type = 3
                 now[i][j].image = pic[now[i][j].pipe_type]
-        drawing(screen, now)
+        drawing(screen, now, now_time)
         pygame.display.flip()
         clock.tick(2)

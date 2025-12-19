@@ -3,7 +3,6 @@ import pics
 import config
 import numpy as np, pygame
 def drawing(screen, objects, now_time):
-    screen.fill((102, 100, 105))
     for o in objects:
         for obj in o:
             if obj != 0:

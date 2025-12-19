@@ -24,6 +24,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    screen.fill((102, 100, 105))
     now_time = str(round(time.time() - start, 2))
     results, fRGB = get_hands(cap, handsDetector)
     drawing(screen, objects, now_time)
@@ -59,6 +60,6 @@ while running:
 if win:
     you_win(screen)
 if showing_ans:
-    show_ans(objects, a_ans)
+    show_ans(objects, a_ans, now_time)
 handsDetector.close()
 pygame.quit()
