@@ -3,7 +3,7 @@ from rotation import *
 import mediapipe as mp
 import cv2
 import math
-import pygame, config
+import pygame, config, time
 
 
 pygame.init()
@@ -19,6 +19,7 @@ objects = f(a)
 showing_ans = False
 win = 0
 instruction(screen)
+start = time.time()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -46,7 +47,7 @@ while running:
                         if r_angle < 0:
                             r_angle += 360
                         change_rotation(r_angle, objects, object_index)
-    if give_up(results, fRGB):
+    if give_up(results, fRGB) and time.time() - start > 10:
         running = False
         showing_ans = True
     if check_solution(objects, a_ans):
