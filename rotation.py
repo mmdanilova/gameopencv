@@ -5,7 +5,7 @@ import numpy as np
 import math
 
 def drawing(screen, objects):
-    screen.fill((102, 100, 105))
+    #screen.fill((102, 100, 105))
     for o in objects:
         for obj in o:
             if obj != 0:
@@ -13,8 +13,9 @@ def drawing(screen, objects):
 def check_solution(now, ans):
     for i in range(len(now)):
         for j in range(len(now[i])):
-            if now[i][j].pipe_type != ans[i][j] and ans[i][j] != 0:
-                return False
+            if now[i][j] != 0:
+                if now[i][j].pipe_type != ans[i][j] and ans[i][j] != 0:
+                    return False
     return True
 
 def get_hands(cap, handsDetector):

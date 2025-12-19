@@ -24,8 +24,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
     results, fRGB = get_hands(cap, handsDetector)
+    screen.fill((102, 100, 105))
     drawing(screen, objects)
     object_index = None
     if results.multi_handedness:
