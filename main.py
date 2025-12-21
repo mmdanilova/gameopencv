@@ -18,7 +18,11 @@ running = 1
 objects = f(a)
 showing_ans = False
 win = 0
+
+
 instruction(screen)
+
+
 start = time.time()
 while running:
     for event in pygame.event.get():

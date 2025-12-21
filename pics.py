@@ -34,8 +34,13 @@ hand3 = pygame.image.load('image-Photoroom.png')
 hand3 = pygame.transform.scale(hand3, (int(0.7 * hand3.get_rect()[2]), int(0.7 * hand3.get_rect()[3])))
 hand3 = pygame.transform.rotate(hand3, 330)
 
+big_pipe_t3 = pygame.image.load('pipes2_v5.png')
+big_pipe_t3 = pygame.transform.scale(big_pipe_t3, (300, 300))
+big_pipe_t3 = pygame.transform.rotate(big_pipe_t3, 270)
+
 
 key = pygame.image.load("key.png")
+big_key = pygame.transform.scale(key, (150, 150))
 key = pygame.transform.scale(key, (50, 50))
 key1 = picture(key, 1100//2, 600//2, 50, 50, 0)
 

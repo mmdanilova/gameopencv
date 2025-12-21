@@ -113,45 +113,133 @@ def give_up(results, flippedRGB):
                 return True
     return False
 
+
 def instruction(screen):
     clock = pygame.time.Clock()
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(0)
-    running = True
-    font = pygame.font.SysFont(None, 48)
-    font1 = pygame.font.SysFont(None, 40)
-
-    txt_surface1 = font.render("Your main task is to assemble the plumbing correctly.", True, (0, 0, 0))
-    txt_surface2 = font.render("This is small instruction:", True, (0, 0, 0))
-    txt_surface3 = font1.render("1. if you want to start the game", True, (0, 0, 0))
-    txt_surface4 = font1.render("2. if you want to see the correct answer", True, (0, 0, 0))
-    txt_surface5 = font1.render("3. To turn the pipe over, point", True, (0, 0, 0))
-    txt_surface6 = font1.render("one finger with the key at the pipe", True, (0, 0, 0))
-    txt_surface7 = font1.render("rotate the wrist of your other hand,", True, (0, 0, 0))
-    txt_surface8 = font1.render("maintaining the gesture as in photo", True, (0, 0, 0))
-    while running:
+    font = pygame.font.Font('M_PLUS_Rounded_1c/MPLUSRounded1c-ExtraBold.ttf', 45)
+    step1 = 1
+    txt = [" Your main task in the game will", "be to assemble the water supply", "  system so that it can be used"]
+    txt_surfaces = []
+    for i in txt:
+        txt_surfaces.append(font.render(i, True, '#060E26'))
+    while step1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-        results, flippedRGB = get_hands(cap, handsDetector)
-        screen.fill((102, 100, 105))
-        screen.blit(txt_surface1, (100, 100))
-        screen.blit(txt_surface2, (100, 150))
-        screen.blit(txt_surface3, (50, 320))
-        screen.blit(txt_surface4, (50, 350))
-        screen.blit(txt_surface5, (600, 260))
-        screen.blit(txt_surface6, (600, 290))
-        screen.blit(txt_surface7, (600, 320))
-        screen.blit(txt_surface8, (600, 350))
-        screen.blit(hand1, (100, 375))
-        screen.blit(hand2, (600, 400))
-        screen.blit(key, (730, 400))
-        screen.blit(hand3, (620, 300))
+                step1 = 0
+        screen.fill('#A1A6B5')
+        for i in range(len(txt_surfaces)):
+            screen.blit(txt_surfaces[i], (200, i*60+50))
+        pygame.draw.rect(screen, '#D4FAB9', ((275, 275), (250, 250)))
+        pygame.draw.rect(screen, '#FCCCCC', ((575, 275), (250, 250)))
+        pygame.draw.rect(screen, '#060E26', ((275, 275), (250, 250)), 3)
+        pygame.draw.rect(screen, '#060E26', ((575, 275), (250, 250)), 3)
 
-        if results.multi_hand_landmarks is not None:
-            if check_paper(0, results, flippedRGB) == 1:
-                running = False
-                return
+        screen.blit(pic[5], (300, 300))
+        screen.blit(pic[6], (400, 300))
+        screen.blit(pic[4], (300, 400))
+        screen.blit(pic[3], (400, 400))
+
+        screen.blit(pic[3], (600, 300))
+        screen.blit(pic[5], (700, 300))
+        screen.blit(pic[4], (600, 400))
+        screen.blit(pic[6], (700, 400))
+
+        #if рука показывает лайк, то step1 = 0
+
+        pygame.display.flip()
+        clock.tick(120)
+
+    step2 = 1
+    handsDetector = mp.solutions.hands.Hands()
+    cap = cv2.VideoCapture(0)
+    txt = ["    Place your left index finger on", "   the pipe to control its position.", "The wrench will follow your finger."]
+    txt_surfaces = []
+    objects = [[picture(pic[1], 300, 300, WIDTH, HEIGHT)]]
+    for i in txt:
+        txt_surfaces.append(font.render(i, True, '#060E26'))
+    while step2:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                step2 = 0
+        screen.fill('#A1A6B5')
+        for i in range(len(txt_surfaces)):
+            screen.blit(txt_surfaces[i], (150, i*60+50))
+
+        results, fRGB = get_hands(cap, handsDetector)
+        if results.multi_handedness:
+            object_index, x, y = get_object(results, objects)
+            if x and y:
+                screen.blit(big_key, (x, y))
+
+        #if рука показывает лайк, то step2 = 0
+        pygame.display.flip()
+        clock.tick(120)
+
+    step3 = 1
+    txt = ["    You can use the finger of your other", "  hand to control the position of the pipe.", "Just rotate the pipe with your index finger."]
+    txt1_surface = font.render("try here", True, '#060E26')
+    txt_surfaces = []
+    for i in txt:
+        txt_surfaces.append(font.render(i, True, '#060E26'))
+    objects = [[picture(pipe_t3, 300, 300, 100, 100, 3)]]
+
+    while step3:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                step3 = 0
+        screen.fill('#A1A6B5')
+        pygame.draw.rect(screen, '#D4FAB9', (275, 275, 150, 150))
+        pygame.draw.rect(screen, '#060E26', (275, 275, 150, 150), 3)
+
+        drawing(screen, objects, "test")
+
+        results, fRGB = get_hands(cap, handsDetector)
+        if results.multi_handedness:
+            object_index, x, y = get_object(results, objects)
+            if x and y:
+                screen.blit(key1.image, (x, y))
+
+            for i in range(len(results.multi_handedness)):
+                if "Right" in str(results.multi_handedness[i]):
+                    x1 = int(results.multi_hand_landmarks[i].landmark[8].x * WIDTH)
+                    y1 = int(results.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
+                    x2 = int(results.multi_hand_landmarks[i].landmark[0].x * WIDTH)
+                    y2 = int(results.multi_hand_landmarks[i].landmark[0].y * HEIGHT)
+                    x, y = x1 - x2, y1 - y2
+                    angle = math.atan2(y, x)
+                    if abs(x1 - x2) + abs(y1 - y2) > 150:
+                        if object_index is not None:
+                            r_angle = (math.degrees(angle) + 45) // 90 * 90
+                            if r_angle < 0:
+                                r_angle += 360
+                            change_rotation(r_angle, objects, object_index)
+
+        for i in range(len(txt_surfaces)):
+            screen.blit(txt_surfaces[i], (50, i*60+50))
+        screen.blit(txt1_surface, (250, 450))
+
+        #if рука показывает лайк, то step3 = 0
+
+        pygame.display.flip()
+        clock.tick(120)
+
+    step4 = 1
+    txt = ["     If you realize that you cannot complete", "a level, then after 10 seconds show 2 palms", "  and you will be shown the correct solution.",
+"If you're ready to start playing, give us a like!"]
+    txt_surfaces = []
+    for i in txt:
+        txt_surfaces.append(font.render(i, True, '#060E26'))
+    objects = [[picture(pipe_t3, 300, 300, 100, 100, 3)]]
+    while step4:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                step4 = 0
+        screen.fill('#A1A6B5')
+        for i in range(len(txt_surfaces)):
+            screen.blit(txt_surfaces[i], (50, i*60+50))
+
+        #if рука показывает лайк, то step4 = 0
+
         pygame.display.flip()
         clock.tick(120)
     pygame.quit()

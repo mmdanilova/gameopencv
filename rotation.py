@@ -7,16 +7,17 @@ def drawing(screen, objects, now_time):
         for obj in o:
             if obj != 0:
                 screen.blit(obj.image, (obj.x, obj.y))
-    font = pygame.font.SysFont(None, 40)
-    i = now_time.index(".")
-    s1 = str(int(now_time[:i]) % 100 % 60)
-    s2 = str(int(now_time[:i]) % 100 // 60)
-    if len(s1) < 2:
-        s1 = "0" + s1
-    if len(s2) < 2:
-        s2 = "0" + s2
-    txt_surface = font.render(f"{s2}:{s1}:{now_time[(i+1):]}", True, (0, 0, 0))
-    screen.blit(txt_surface, (950, 50))
+    if now_time != "test":
+        font = pygame.font.SysFont(None, 40)
+        i = now_time.index(".")
+        s1 = str(int(now_time[:i]) % 100 % 60)
+        s2 = str(int(now_time[:i]) % 100 // 60)
+        if len(s1) < 2:
+            s1 = "0" + s1
+        if len(s2) < 2:
+            s2 = "0" + s2
+        txt_surface = font.render(f"{s2}:{s1}:{now_time[(i+1):]}", True, (0, 0, 0))
+        screen.blit(txt_surface, (950, 50))
 
 def check_solution(now, ans):
     for i in range(len(now)):
