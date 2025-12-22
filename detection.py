@@ -28,27 +28,44 @@ def size(landmark, shape, i, j):
     x2, y2 = landmark[j].x * shape[1], landmark[j].y * shape[0]
     return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
 
+def is_like(results):
+    if not results.multi_hand_landmarks:
+        return False
 
-def check_circle(xp, yp, xc, yc, r, flippedRGB):
-    new_r = math.hypot(abs(xp - xc), abs(yp - yc))
-    cv2.circle(flippedRGB, (int(xc), int(yc)), int(r), (0, 0, 255), 2)
-    if new_r > r * 1.3:
-        return 2  # вне окружности
-    elif r * 1.3 >= new_r >= 0.7 * r:
-        return 1  # на окружности
-    else:
-        return 0  # в окружности
+    for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+        hand_label = handedness.classification[0].label
+        landmarks = hand_landmarks.landmark
 
-def check_paper(i, results, flippedRGB):
-    points = get_points(results.multi_hand_landmarks[i].landmark, flippedRGB.shape)
-    (x, y), r = cv2.minEnclosingCircle(points)
-    a = [4, 8, 12, 16, 20]
-    for j in a:
-        x1, y1 = get_point(results.multi_hand_landmarks[i].landmark, flippedRGB.shape, j)
-        ws = size(results.multi_hand_landmarks[i].landmark, flippedRGB.shape, 0, 5)
-        if check_circle(x1, y1, x, y, r, flippedRGB) != 1 or r * 2 / ws < 1.8:
-            return 0
-    return 1
+        thumb_tip = landmarks[4]
+        thumb_ip = landmarks[3]
+        thumb_mcp = landmarks[2]
+        index_mcp = landmarks[5]
+        index_pip = landmarks[6]
+        index_tip = landmarks[8]
+
+        thumb_tip_x = thumb_tip.x
+        thumb_tip_y = thumb_tip.y
+        index_mcp_x = index_mcp.x
+        index_mcp_y = index_mcp.y
+
+        y_diff = index_mcp_y - thumb_tip_y
+        if y_diff < 0.05:
+            continue
+
+        if not (thumb_tip_y < thumb_ip.y < thumb_mcp.y):
+            continue
+
+        if index_tip.y < index_pip.y:
+            continue
+
+        if hand_label == "Right":
+            if thumb_tip_x < index_mcp_x:
+                return True
+        else:
+            if thumb_tip_x > index_mcp_x:
+                return True
+
+    return False
 
 
 def get_object(res, objs):

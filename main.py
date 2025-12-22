@@ -52,7 +52,7 @@ while running:
                         if r_angle < 0:
                             r_angle += 360
                         change_rotation(r_angle, objects, object_index)
-    if give_up(results, fRGB) and time.time() - start > 10:
+    if give_up(results) and time.time() - start > 10:
         running = False
         showing_ans = True
 
