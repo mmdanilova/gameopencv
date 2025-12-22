@@ -1,5 +1,6 @@
 import pics
 import pygame
+
 def drawing(screen, objects, now_time):
     for o in objects:
         for obj in o:
