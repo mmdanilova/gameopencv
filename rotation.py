@@ -21,7 +21,7 @@ def drawing(screen, objects, now_time):
 
 def change_rotation(angle, objects, object_index):
     if objects[object_index[0]][object_index[1]].pipe_type == 1 or objects[object_index[0]][object_index[1]].pipe_type == 2:
-        if abs(angle) == 0 or abs(angle) == 180:
+        if abs(angle) == 90 or abs(angle) == 270:
             objects[object_index[0]][object_index[1]].pipe_type = 2
             objects[object_index[0]][object_index[1]].image = pics.pic[objects[object_index[0]][object_index[1]].pipe_type]
         else:
