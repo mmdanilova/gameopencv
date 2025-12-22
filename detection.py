@@ -54,11 +54,14 @@ def is_like(results):
         if not (thumb_tip_y < thumb_ip.y < thumb_mcp.y):
             continue
 
+        if index_mcp.y > index_tip.y:
+            continue
+
         if hand_label == "Right":
-            if thumb_tip_x < index_mcp_x and index_tip.x - index_mcp.x < 0.05:
+            if thumb_tip_x < index_mcp_x and abs(index_tip.x - index_mcp.x) < 0.075:
                 return True
         else:
-            if thumb_tip_x > index_mcp_x and index_mcp.x - index_tip.x < 0.05:
+            if thumb_tip_x > index_mcp_x and abs(index_mcp.x - index_tip.x) < 0.075:
                 return True
 
     return False
@@ -78,16 +81,4 @@ def get_object(res, objs):
                         if elem.x <= xk < elem.x + elem.width and elem.y <= yk < elem.y + elem.height:
                             on_index = [x, y]
     return on_index, xk, yk
-
-
-def left_and_right(hands):
-    rl, ri, li = False, None, None
-    for i in range(len(hands)):
-        if "Right" in str(hands[i]):
-            ri = i
-        else:
-            li = i
-    if ri is not None and li is not None:
-        rl = True
-    return rl, ri, li
 
