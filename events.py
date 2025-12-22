@@ -8,7 +8,7 @@ from rotation import *
 def you_win(screen):
     clock = pygame.time.Clock()
     running = True
-    font = pygame.font.Font('M_PLUS_Rounded_1c/MPLUSRounded1c-ExtraBold.ttf', 45)
+    font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
     txt = ["   Well done! you managed to pass this", "level. Show a like to start the next one."]
     txt_surfaces = []
     for i in txt:
@@ -36,7 +36,7 @@ def give_up(results, flippedRGB):
 
 def instruction(screen):
     clock = pygame.time.Clock()
-    font = pygame.font.Font('M_PLUS_Rounded_1c/MPLUSRounded1c-ExtraBold.ttf', 45)
+    font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
     step1 = 1
     txt = [" Your main task in the game will", "be to assemble the water supply", "  system so that it can be used"]
     txt_surfaces = []
