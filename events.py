@@ -3,6 +3,7 @@ from detection import *
 from pics import *
 import mediapipe as mp
 from rotation import *
+import time
 
 
 def you_win(screen):
@@ -25,16 +26,16 @@ def you_win(screen):
     pygame.quit()
 
 
-def give_up(results, flippedRGB):
-    if results.multi_hand_landmarks is not None and len(results.multi_hand_landmarks) >= 2:
-        r_and_l, r_index, l_index = left_and_right(results.multi_handedness)
-        if r_and_l:
-            if check_paper(r_index, results, flippedRGB) == 1 and check_paper(l_index, results, flippedRGB) == 1:
-                return True
+def give_up(results):
+    if results.multi_hand_landmarks is not None:
+        if is_like(results):
+            return True
     return False
 
 
 def instruction(screen):
+    handsDetector = mp.solutions.hands.Hands()
+    cap = cv2.VideoCapture(0)
     clock = pygame.time.Clock()
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
     step1 = 1
@@ -42,7 +43,9 @@ def instruction(screen):
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
+    start = time.time()
     while step1:
+        results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 step1 = 0
@@ -64,21 +67,22 @@ def instruction(screen):
         screen.blit(pic[4], (600, 400))
         screen.blit(pic[6], (700, 400))
 
-        # if рука показывает лайк, то step1 = 0
+        if is_like(results) and time.time() - start > 5:
+            step1 = 0
 
         pygame.display.flip()
         clock.tick(120)
 
     step2 = 1
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(0)
     txt = ["    Place your left index finger on", "   the pipe to control its position.",
            "The wrench will follow your finger."]
     txt_surfaces = []
     objects = [[picture(pic[1], 300, 300, WIDTH, HEIGHT)]]
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
+    start = time.time()
     while step2:
+        results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 step2 = 0
@@ -86,13 +90,13 @@ def instruction(screen):
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (150, i * 60 + 50))
 
-        results, fRGB = get_hands(cap, handsDetector)
         if results.multi_handedness:
             object_index, x, y = get_object(results, objects)
             if x and y:
                 screen.blit(big_key, (x, y))
 
-        # if рука показывает лайк, то step2 = 0
+        if is_like(results) and time.time() - start > 5:
+            step2 = 0
         pygame.display.flip()
         clock.tick(120)
 
@@ -104,8 +108,9 @@ def instruction(screen):
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
     objects = [[picture(pipe_t3, 300, 300, 100, 100, 3)]]
-
+    start = time.time()
     while step3:
+        results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 step3 = 0
@@ -140,7 +145,8 @@ def instruction(screen):
             screen.blit(txt_surfaces[i], (50, i * 60 + 50))
         screen.blit(txt1_surface, (250, 450))
 
-        # if рука показывает лайк, то step3 = 0
+        if is_like(results) and time.time() - start > 5:
+            step3 = 0
 
         pygame.display.flip()
         clock.tick(120)
@@ -153,7 +159,9 @@ def instruction(screen):
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
     objects = [[picture(pipe_t3, 300, 300, 100, 100, 3)]]
+    start = time.time()
     while step4:
+        results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 step4 = 0
@@ -161,7 +169,8 @@ def instruction(screen):
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (50, i * 60 + 50))
 
-        # if рука показывает лайк, то step4 = 0
+        if is_like(results) and time.time() - start > 5:
+            step4 = 0
 
         pygame.display.flip()
         clock.tick(120)
