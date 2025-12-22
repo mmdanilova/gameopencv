@@ -1,8 +1,6 @@
 import config
 import cv2
 import numpy as np
-import math
-
 
 def get_hands(cap, handsDetector):
     ret, frame = cap.read()
@@ -27,6 +25,12 @@ def size(landmark, shape, i, j):
     x1, y1 = landmark[i].x * shape[1], landmark[i].y * shape[0]
     x2, y2 = landmark[j].x * shape[1], landmark[j].y * shape[0]
     return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+
+def give_up(results):
+    if results.multi_hand_landmarks is not None:
+        if is_like(results):
+            return True
+    return False
 
 def is_like(results):
     if not results.multi_hand_landmarks:

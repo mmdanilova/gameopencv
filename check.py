@@ -91,6 +91,16 @@ def check_solution(now, ans):
     return True
 
 
+def read_level(ind):
+    with open('levels.txt', 'r', encoding='utf-8') as f:
+        line = f.readlines()[ind]
+        a1 = line.split()
+        a = [[] for i in range(5)]
+        for i in range(5):
+            for j in range(10):
+                a[i].append(int(a1[j+i*10]))
+    return a
+
 def f(array):
     objects = []
     for i in range(len(array)):
