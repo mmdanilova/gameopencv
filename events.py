@@ -152,7 +152,7 @@ def instruction(screen):
         clock.tick(120)
 
     step4 = 1
-    txt = ["     If you realize that you cannot complete", "a level, then after 10 seconds show 2 palms",
+    txt = ["     If you realize that you cannot complete", "a level, then after 10 seconds show like",
            "  and you will be shown the correct solution.",
            "If you're ready to start playing, give us a like!"]
     txt_surfaces = []

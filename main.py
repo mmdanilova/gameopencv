@@ -28,7 +28,6 @@ def level(screen, a):
 
     start = time.time()
     finish = -1
-    start_of_showing = -1
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -37,7 +36,6 @@ def level(screen, a):
         now_time = str(round(time.time() - start, 2))
         results, fRGB = get_hands(cap, handsDetector)
         drawing(screen, objects, now_time)
-        object_index = None
         if results.multi_handedness:
             object_index, x, y = get_object(results, objects)
             if x and y:
@@ -58,27 +56,29 @@ def level(screen, a):
                                 r_angle += 360
                             change_rotation(r_angle, objects, object_index)
         if give_up(results) and time.time() - start > 10:
-            running = False
             showing_ans = True
+            running = False
 
-        if win:
-            you_win(screen)
-            if time.time() - finish > 10 and finish != -1:
-                return None
-        if showing_ans:
-            show_ans(screen, objects, a_ans, now_time)
-            end_of_showing = time.time()
-            if time.time() - end_of_showing > 10:
-                return None
         if check_solution(objects, a_ans) and finish == -1:
             finish = time.time()
         elif not check_solution(objects, a_ans) and finish != -1:
             finish = -1
         elif check_solution(objects, a_ans) and time.time() - finish > 3:
-            running = False
             win = True
+            running = False
+
         pygame.display.flip()
         clock.tick(120)
+
+    if win:
+        you_win(screen)
+        if time.time() - finish > 10 and finish != -1:
+            return None
+    elif showing_ans:
+        show_ans(screen, objects, a_ans, now_time)
+        end_of_showing = time.time()
+        if time.time() - end_of_showing > 10:
+            return None
 
 level(screen, a)
 #Здесь можно по порядку вызывать уровни

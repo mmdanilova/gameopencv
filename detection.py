@@ -58,10 +58,10 @@ def is_like(results):
             continue
 
         if hand_label == "Right":
-            if thumb_tip_x < index_mcp_x and abs(index_tip.x - index_mcp.x) < 0.075:
+            if thumb_tip_x < index_mcp_x and abs(index_tip.x - index_mcp.x) < 0.075 and index_tip.y > thumb_tip_y:
                 return True
         else:
-            if thumb_tip_x > index_mcp_x and abs(index_mcp.x - index_tip.x) < 0.075:
+            if thumb_tip_x > index_mcp_x and abs(index_mcp.x - index_tip.x) < 0.075 and index_tip.y > thumb_tip_y:
                 return True
 
     return False
