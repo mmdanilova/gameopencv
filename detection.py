@@ -40,7 +40,6 @@ def is_like(results):
         thumb_ip = landmarks[3]
         thumb_mcp = landmarks[2]
         index_mcp = landmarks[5]
-        index_pip = landmarks[6]
         index_tip = landmarks[8]
 
         thumb_tip_x = thumb_tip.x
@@ -55,14 +54,11 @@ def is_like(results):
         if not (thumb_tip_y < thumb_ip.y < thumb_mcp.y):
             continue
 
-        if index_tip.y < index_pip.y:
-            continue
-
         if hand_label == "Right":
-            if thumb_tip_x < index_mcp_x:
+            if thumb_tip_x < index_mcp_x and index_tip.x - index_mcp.x < 0.05:
                 return True
         else:
-            if thumb_tip_x > index_mcp_x:
+            if thumb_tip_x > index_mcp_x and index_mcp.x - index_tip.x < 0.05:
                 return True
 
     return False

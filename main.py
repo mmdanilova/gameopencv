@@ -39,7 +39,7 @@ while running:
             screen.blit(key1.image, (x, y))
 
         for i in range(len(results.multi_handedness)):
-            if "Right" in str(results.multi_handedness[i]):
+            if results.multi_handedness[i].classification[0].label:
                 x1 = int(results.multi_hand_landmarks[i].landmark[8].x * WIDTH)
                 y1 = int(results.multi_hand_landmarks[i].landmark[8].y * HEIGHT)
                 x2 = int(results.multi_hand_landmarks[i].landmark[0].x * WIDTH)
