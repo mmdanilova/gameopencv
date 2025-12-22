@@ -8,27 +8,28 @@ import pygame, config, time
 
 pygame.init()
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
-a = [[3, 1, 1, 1, 3], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [3, 1, 1, 1, 3]]
-a_copy = [[3, 1, 1, 1, 3], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [1, 0, 0, 0, 1], [3, 1, 1, 1, 3]]
+a = [[0, 0, 0, 3, 1, 1, 3, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+     [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 3, 1, 1, 3, 0, 0, 0]]
+a_copy = [[0, 0, 0, 3, 1, 1, 3, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+     [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 3, 1, 1, 3, 0, 0, 0]]
 a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
 handsDetector = mp.solutions.hands.Hands()
 cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
-running = 1
+running = 0
 objects = f(a)
 showing_ans = False
-win = 0
+win = 1
 
-
-instruction(screen)
-
+#instruction(screen)
 
 start = time.time()
+finish = -1
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    screen.fill((102, 100, 105))
+    screen.fill('#A1A6B5')
     now_time = str(round(time.time() - start, 2))
     results, fRGB = get_hands(cap, handsDetector)
     drawing(screen, objects, now_time)
@@ -52,10 +53,13 @@ while running:
                         if r_angle < 0:
                             r_angle += 360
                         change_rotation(r_angle, objects, object_index)
-    if give_up(results, fRGB) and time.time() - start > 10:
-        running = False
-        showing_ans = True
-    if check_solution(objects, a_ans):
+    #if give_up(results, fRGB) and time.time() - start > 10:
+    #    running = False
+    #    showing_ans = True
+
+    if check_solution(objects, a_ans) and finish == -1:
+        finish = time.time()
+    elif check_solution(objects, a_ans) and time.time() - finish > 3:
         running = False
         win = True
     pygame.display.flip()
