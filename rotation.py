@@ -1,7 +1,5 @@
-import cv2
 import pics
-import config
-import numpy as np, pygame
+import pygame
 def drawing(screen, objects, now_time):
     for o in objects:
         for obj in o:
@@ -18,35 +16,6 @@ def drawing(screen, objects, now_time):
             s2 = "0" + s2
         txt_surface = font.render(f"{s2}:{s1}:{now_time[(i+1):]}", True, (0, 0, 0))
         screen.blit(txt_surface, (950, 50))
-
-def check_solution(now, ans):
-    for i in range(len(now)):
-        for j in range(len(now[i])):
-            if now[i][j] != 0:
-                if now[i][j].pipe_type != ans[i][j] and ans[i][j] != 0:
-                    return False
-    return True
-
-def get_hands(cap, handsDetector):
-    ret, frame = cap.read()
-    flipped = np.fliplr(frame)
-    flippedRGB = cv2.cvtColor(flipped, cv2.COLOR_BGR2RGB)
-    results = handsDetector.process(flippedRGB)
-    return results, flippedRGB
-
-def f(array):
-    objects = []
-    for i in range(len(array)):
-        line = []
-        for j in range(len(array[i])):
-            if array[i][j] == 1 or array[i][j] == 2:
-                line.append(pics.picture(pics.pipe_t1, j * 100 + 50, i * 100 + 50, 100, 100, 1))
-            elif array[i][j] == 0:
-                line.append(0)
-            else:
-                line.append(pics.picture(pics.pipe_t3, j * 100 + 50, i * 100 + 50, 100, 100, 3))
-        objects.append(line)
-    return objects
 
 
 def change_rotation(angle, objects, object_index):

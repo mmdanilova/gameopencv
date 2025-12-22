@@ -1,3 +1,5 @@
+import pics
+
 # решение задачи о том как расставить трубы правильно и возможно ли это
 # 0 - нет трубы
 # 1 - прямая труба вправо
@@ -78,3 +80,27 @@ def solution(n: int, m: int, a1: list[list]):
                     ans = 6
             a2[i][j] = ans
     return a2
+
+
+def check_solution(now, ans):
+    for i in range(len(now)):
+        for j in range(len(now[i])):
+            if now[i][j] != 0:
+                if now[i][j].pipe_type != ans[i][j] and ans[i][j] != 0:
+                    return False
+    return True
+
+
+def f(array):
+    objects = []
+    for i in range(len(array)):
+        line = []
+        for j in range(len(array[i])):
+            if array[i][j] == 1 or array[i][j] == 2:
+                line.append(pics.picture(pics.pipe_t1, j * 100 + 50, i * 100 + 50, 100, 100, 1))
+            elif array[i][j] == 0:
+                line.append(0)
+            else:
+                line.append(pics.picture(pics.pipe_t3, j * 100 + 50, i * 100 + 50, 100, 100, 3))
+        objects.append(line)
+    return objects

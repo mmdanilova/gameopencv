@@ -1,12 +1,11 @@
-from program3 import *  # from program1 import, import pics *, import numpy as np
-from rotation import *
-import mediapipe as mp
-import cv2
-import math
-import pygame, config, time
+import time
+from events import *
+from check import *
+from pics import *
 
 
 pygame.init()
+pygame.display.set_caption("plumbing")
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
 a = [[0, 0, 0, 3, 1, 1, 3, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
      [0, 0, 0, 1, 0, 0, 1, 0, 0, 0], [0, 0, 0, 3, 1, 1, 3, 0, 0, 0]]
@@ -16,12 +15,12 @@ a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
 handsDetector = mp.solutions.hands.Hands()
 cap = cv2.VideoCapture(0)
 clock = pygame.time.Clock()
-running = 0
+running = 1
 objects = f(a)
 showing_ans = False
-win = 1
+win = 0
 
-#instruction(screen)
+instruction(screen)
 
 start = time.time()
 finish = -1
@@ -68,6 +67,6 @@ while running:
 if win:
     you_win(screen)
 if showing_ans:
-    show_ans(objects, a_ans, now_time)
+    show_ans(screen, objects, a_ans, now_time)
 handsDetector.close()
 pygame.quit()

@@ -1,91 +1,8 @@
-import config
-from program1 import *
-import cv2
-import numpy as np
-import math
-from pics import *  # import pygame
-from rotation import *
+from config import *
+from detection import *
+from pics import *
 import mediapipe as mp
-
-pygame.init()
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-a = [[0, 3, 1, 2, 4], [0, 2, 0, 0, 1], [0, 1, 0, 0, 1], [0, 6, 2, 2, 5]]
-a2 = [[0, 3, 1, 2, 4], [0, 2, 0, 0, 1], [0, 1, 0, 0, 1], [0, 6, 2, 2, 5]]
-a1 = solution(len(a), len(a[0]), a2)
-
-
-def get_points(landmark, shape):
-    points = []
-    for mark in landmark:
-        points.append([mark.x * shape[1], mark.y * shape[0]])
-    return np.array(points, dtype=np.int32)
-
-
-def get_point(landmark, shape, i):
-    return landmark[i].x * shape[1], landmark[i].y * shape[0]
-
-
-def size(landmark, shape, i, j):
-    x1, y1 = landmark[i].x * shape[1], landmark[i].y * shape[0]
-    x2, y2 = landmark[j].x * shape[1], landmark[j].y * shape[0]
-    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
-
-
-def check_circle(xp, yp, xc, yc, r, flippedRGB):
-    new_r = math.hypot(abs(xp - xc), abs(yp - yc))
-    cv2.circle(flippedRGB, (int(xc), int(yc)), int(r), (0, 0, 255), 2)
-    if new_r > r * 1.3:
-        return 2  # вне окружности
-    elif r * 1.3 >= new_r >= 0.7 * r:
-        return 1  # на окружности
-    else:
-        return 0  # в окружности
-
-
-def check_paper(i, results, flippedRGB):
-    points = get_points(results.multi_hand_landmarks[i].landmark, flippedRGB.shape)
-    (x, y), r = cv2.minEnclosingCircle(points)
-    a = [4, 8, 12, 16, 20]
-    for j in a:
-        x1, y1 = get_point(results.multi_hand_landmarks[i].landmark, flippedRGB.shape, j)
-        ws = size(results.multi_hand_landmarks[i].landmark, flippedRGB.shape, 0, 5)
-        if check_circle(x1, y1, x, y, r, flippedRGB) != 1 or r * 2 / ws < 1.8:
-            return 0
-    return 1
-
-
-def get_object(res, objs):
-    on_index = None
-    xk, yk = None, None
-    for i in range(len(res.multi_handedness)):
-        if "Left" in str(res.multi_handedness[i]):
-            xk = int(res.multi_hand_landmarks[i].landmark[8].x * config.WIDTH)
-            yk = int(res.multi_hand_landmarks[i].landmark[8].y * config.HEIGHT)
-            for x in range(len(objs)):
-                for y in range(len(objs[x])):
-                    elem = objs[x][y]
-                    if elem != 0:
-                        if elem.x <= xk < elem.x + elem.width and elem.y <= yk < elem.y + elem.height:
-                            on_index = [x, y]
-    return on_index, xk, yk
-
-
-def draw_cur(now: list[list]):
-    clock = pygame.time.Clock()
-    running = 1
-    while running:
-        screen.fill((102, 100, 105))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = 0
-        for i in range(len(now)):
-            for j in range(len(now[i])):
-                if now[i][j] != 0:
-                    screen.blit(pic[now[i][j]], (j * 100 + 50, i * 100 + 50))
-
-        pygame.display.flip()
-        clock.tick(5)
+from rotation import *
 
 
 def you_win(screen):
@@ -106,18 +23,6 @@ def you_win(screen):
         pygame.display.flip()
         clock.tick(120)
     pygame.quit()
-
-
-def left_and_right(hands):
-    rl, ri, li = False, None, None
-    for i in range(len(hands)):
-        if "Right" in str(hands[i]):
-            ri = i
-        else:
-            li = i
-    if ri is not None and li is not None:
-        rl = True
-    return rl, ri, li
 
 
 def give_up(results, flippedRGB):
@@ -262,7 +167,7 @@ def instruction(screen):
         clock.tick(120)
 
 
-def show_ans(now: list[list], ans: list[list],
+def show_ans(screen, now: list[list], ans: list[list],
              now_time):  # ресует процесс получения из данного состояния правильные трубы
     i, j = 0, 0
     clock = pygame.time.Clock()
@@ -272,7 +177,7 @@ def show_ans(now: list[list], ans: list[list],
             if event.type == pygame.QUIT:
                 running = 0
 
-        screen.fill((102, 100, 105))
+        screen.fill('#A1A6B5')
         while i < len(now) and j < len(now[0]) and ans[i][j] == 0:
             j += 1
             if j >= len(now[0]):
@@ -280,7 +185,7 @@ def show_ans(now: list[list], ans: list[list],
                 i += 1
         if i < len(now) and j < len(now[0]):
             if now[i][j].pipe_type == ans[i][j]:
-                pygame.draw.rect(screen, (182, 250, 175), (now[i][j].x, now[i][j].y, now[i][j].width, now[i][j].height))
+                pygame.draw.rect(screen, '#D4FAB9', (now[i][j].x, now[i][j].y, now[i][j].width, now[i][j].height))
                 j += 1
                 if j >= len(now[0]):
                     j = 0
@@ -296,3 +201,21 @@ def show_ans(now: list[list], ans: list[list],
         drawing(screen, now, now_time)
         pygame.display.flip()
         clock.tick(2)
+
+
+def drawing(screen, objects, now_time):
+    for o in objects:
+        for obj in o:
+            if obj != 0:
+                screen.blit(obj.image, (obj.x, obj.y))
+    if now_time != "test":
+        font = pygame.font.SysFont(None, 40)
+        i = now_time.index(".")
+        s1 = str(int(now_time[:i]) % 100 % 60)
+        s2 = str(int(now_time[:i]) % 100 // 60)
+        if len(s1) < 2:
+            s1 = "0" + s1
+        if len(s2) < 2:
+            s2 = "0" + s2
+        txt_surface = font.render(f"{s2}:{s1}:{now_time[(i+1):]}", True, (0, 0, 0))
+        screen.blit(txt_surface, (950, 50))
