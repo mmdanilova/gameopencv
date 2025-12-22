@@ -7,16 +7,13 @@ from pics import *
 pygame.init()
 pygame.display.set_caption("plumbing")
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
-a = [[3, 1, 3, 0, 0, 0, 3, 3, 0, 0],
-     [1, 0, 1, 0, 0, 0, 3, 3, 0, 0],
-     [3, 1, 3, 0, 3, 1, 1, 1, 3, 0],
-     [0, 0, 3, 1, 3, 0, 0, 0, 1, 0],
-     [0, 0, 3, 1, 1, 1, 1, 1, 3, 0]]
-a_copy = [[3, 1, 3, 0, 0, 0, 3, 3, 0, 0],
-     [1, 0, 1, 0, 0, 0, 3, 3, 0, 0],
-     [3, 1, 3, 0, 3, 1, 1, 1, 3, 0],
-     [0, 0, 3, 1, 3, 0, 0, 0, 1, 0],
-     [0, 0, 3, 1, 1, 1, 1, 1, 3, 0]]
+a = [[0, 0, 0, 3, 1, 1, 3, 0, 0, 0],
+       [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+       [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+       [0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+       [0, 0, 0, 3, 1, 1, 3, 0, 0, 0]]
+
+a_copy = a.copy()
 
 a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
 handsDetector = mp.solutions.hands.Hands()
@@ -27,7 +24,7 @@ objects = f(a)
 showing_ans = False
 win = 0
 
-instruction(screen)
+#instruction(screen)
 
 start = time.time()
 finish = -1
@@ -65,6 +62,8 @@ while running:
 
     if check_solution(objects, a_ans) and finish == -1:
         finish = time.time()
+    elif not check_solution(objects, a_ans) and finish != -1:
+        finish = -1
     elif check_solution(objects, a_ans) and time.time() - finish > 3:
         running = False
         win = True
