@@ -28,14 +28,14 @@ def size(landmark, shape, i, j):
 
 def give_up(results):
     if results.multi_hand_landmarks is not None:
-        if is_like(results):
+        if is_like(results) == 2:
             return True
     return False
 
 def is_like(results):
     if not results.multi_hand_landmarks:
-        return False
-
+        return 0
+    count_likes = 0
     for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
         hand_label = handedness.classification[0].label
         landmarks = hand_landmarks.landmark
@@ -63,12 +63,12 @@ def is_like(results):
 
         if hand_label == "Right":
             if thumb_tip_x < index_mcp_x and abs(index_tip.x - index_mcp.x) < 0.075 and index_tip.y > thumb_tip_y:
-                return True
+                count_likes += 1
         else:
             if thumb_tip_x > index_mcp_x and abs(index_mcp.x - index_tip.x) < 0.075 and index_tip.y > thumb_tip_y:
-                return True
+                count_likes += 1
 
-    return False
+    return count_likes
 
 
 def get_object(res, objs):

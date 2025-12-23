@@ -298,6 +298,26 @@ def show_ans(screen, now: list[list], ans: list[list],
 
     lets_start_again(screen, ind)
 
+def winning_screen(screen):
+    handsDetector = mp.solutions.hands.Hands()
+    cap = cv2.VideoCapture(0)
+    clock = pygame.time.Clock()
+    running = True
+    font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
+    txt = ["You solved all tasks,", "now you are real plumber!"]
+    txt_surfaces = []
+    for i in txt:
+        txt_surfaces.append(font.render(i, True, '#060E26'))
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit(0)
+        results, _ = get_hands(cap, handsDetector)
+        screen.fill('#A1A6B5')
+        for i in range(len(txt_surfaces)):
+            screen.blit(txt_surfaces[i], (100, i * 60 + 50))
+        pygame.display.flip()
+        clock.tick(120)
 
 def lets_start_again(screen, ind):
     handsDetector = mp.solutions.hands.Hands()
@@ -319,7 +339,9 @@ def lets_start_again(screen, ind):
             screen.blit(txt_surfaces[i], (100, i * 60 + 50))
         pygame.display.flip()
         clock.tick(120)
-        if is_like(results):
+        if ind == 5:
+            winning_screen(screen)
+        elif is_like(results):
             level(screen, ind)
             return 0
 

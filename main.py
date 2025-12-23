@@ -17,5 +17,4 @@ if not instruction(screen):
     exit(0)
 
 level(screen, 0)
-#Здесь можно по порядку вызывать уровни
 pygame.quit()
