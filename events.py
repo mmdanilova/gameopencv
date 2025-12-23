@@ -113,7 +113,10 @@ def you_win(screen, ind):
         pygame.display.flip()
         clock.tick(120)
         if is_like(results):
-            level(screen, ind + 1)
+            if ind < 5:
+                level(screen, ind + 1)
+            else:
+                winning_screen(screen)
     return
 
 
