@@ -8,13 +8,13 @@ pygame.init()
 pygame.display.set_caption("plumbing")
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
 
-#if not starting_message(screen):
-#    pygame.quit()
-#    exit(0)
+if not starting_message(screen):
+    pygame.quit()
+    exit(0)
 
-#if not instruction(screen):
-#    pygame.quit()
-#    exit(0)
+if not instruction(screen):
+    pygame.quit()
+    exit(0)
 winning_screen(screen)
 level(screen, 5)
 pygame.quit()
