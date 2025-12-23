@@ -23,7 +23,7 @@ def level(screen, ind):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                return 0
         screen.fill('#A1A6B5')
         now_time = str(round(time.time() - start, 2))
         results, fRGB = get_hands(cap, handsDetector)
