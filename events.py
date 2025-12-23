@@ -23,7 +23,7 @@ def level(screen, ind):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return 0
+                exit(0)
         screen.fill('#A1A6B5')
         now_time = str(round(time.time() - start, 2))
         results, fRGB = get_hands(cap, handsDetector)
@@ -80,7 +80,7 @@ def starting_message(screen):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return 0
+                exit(0)
         screen.fill('#A1A6B5')
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (100, i * 60 + 50))
@@ -90,6 +90,7 @@ def starting_message(screen):
         clock.tick(120)
         if is_like(results):
             return 1
+
 
 def you_win(screen, ind):
     handsDetector = mp.solutions.hands.Hands()
@@ -131,7 +132,7 @@ def instruction(screen):
         results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return 0
+                exit(0)
         screen.fill('#A1A6B5')
         screen.blit(plumber1, (200, 230))
         for i in range(len(txt_surfaces)):
@@ -263,8 +264,7 @@ def show_ans(screen, now: list[list], ans: list[list],
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = 0
-
+                exit(0)
         screen.fill('#A1A6B5')
         while i < len(now) and j < len(now[0]) and ans[i][j] == 0:
             j += 1
@@ -272,8 +272,8 @@ def show_ans(screen, now: list[list], ans: list[list],
                 j = 0
                 i += 1
         if i < len(now) and j < len(now[0]):
+            pygame.draw.rect(screen, '#D4FAB9', (now[i][j].x, now[i][j].y, now[i][j].width, now[i][j].height))
             if now[i][j].pipe_type == ans[i][j]:
-                pygame.draw.rect(screen, '#D4FAB9', (now[i][j].x, now[i][j].y, now[i][j].width, now[i][j].height))
                 j += 1
                 if j >= len(now[0]):
                     j = 0
@@ -290,7 +290,7 @@ def show_ans(screen, now: list[list], ans: list[list],
             if finish == -1:
                 finish = time.time()
             else:
-                if time.time() - finish > 3:
+                if time.time() - finish > 1:
                     lets_start_again(screen, ind)
         drawing(screen, now, now_time)
         pygame.display.flip()
@@ -312,7 +312,7 @@ def lets_start_again(screen, ind):
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                exit(0)
         results, _ = get_hands(cap, handsDetector)
         screen.fill('#A1A6B5')
         for i in range(len(txt_surfaces)):
@@ -321,7 +321,7 @@ def lets_start_again(screen, ind):
         clock.tick(120)
         if is_like(results):
             level(screen, ind)
-    return
+            return 0
 
 
 def drawing(screen, objects, now_time):
