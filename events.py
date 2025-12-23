@@ -72,6 +72,30 @@ def level(screen, ind):
             return None
 
 
+def starting_message(screen):
+    handsDetector = mp.solutions.hands.Hands()
+    cap = cv2.VideoCapture(0)
+    clock = pygame.time.Clock()
+    running = True
+    font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
+    txt = ["In this game you will learn how to", "correctly assemble a plumbing system", "using only gestures for control.", "Now you can study the", "instructions. To switch to the", "next step, show a like!"]
+    txt_surfaces = []
+    for i in txt:
+        txt_surfaces.append(font.render(i, True, '#060E26'))
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return 0
+        screen.fill('#A1A6B5')
+        for i in range(len(txt_surfaces)):
+            screen.blit(txt_surfaces[i], (100, i * 60 + 50))
+        results, _ = get_hands(cap, handsDetector)
+        screen.blit(plumber, (600, 300))
+        pygame.display.flip()
+        clock.tick(120)
+        if is_like(results):
+            return 1
+
 def you_win(screen, ind):
     handsDetector = mp.solutions.hands.Hands()
     cap = cv2.VideoCapture(0)
@@ -112,24 +136,15 @@ def instruction(screen):
         results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                step1 = 0
+                return 0
         screen.fill('#A1A6B5')
+        screen.blit(plumber1, (200, 230))
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (200, i * 60 + 50))
-        pygame.draw.rect(screen, '#D4FAB9', ((275, 275), (250, 250)))
-        pygame.draw.rect(screen, '#FCCCCC', ((575, 275), (250, 250)))
-        pygame.draw.rect(screen, '#060E26', ((275, 275), (250, 250)), 3)
-        pygame.draw.rect(screen, '#060E26', ((575, 275), (250, 250)), 3)
-
-        screen.blit(pic[5], (300, 300))
-        screen.blit(pic[6], (400, 300))
-        screen.blit(pic[4], (300, 400))
-        screen.blit(pic[3], (400, 400))
-
-        screen.blit(pic[3], (600, 300))
-        screen.blit(pic[5], (700, 300))
-        screen.blit(pic[4], (600, 400))
-        screen.blit(pic[6], (700, 400))
+        screen.blit(pic[5], (550, 260))
+        screen.blit(pic[6], (650, 260))
+        screen.blit(pic[4], (550, 360))
+        screen.blit(pic[3], (650, 360))
 
         if is_like(results) and time.time() - start > 3:
             step1 = 0
@@ -149,11 +164,11 @@ def instruction(screen):
         results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                step2 = 0
+                return 0
         screen.fill('#A1A6B5')
+        screen.blit(plumber2, (170, 200))
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (150, i * 60 + 50))
-
         if results.multi_handedness:
             object_index, x, y = get_object(results, objects)
             if x and y:
@@ -177,8 +192,9 @@ def instruction(screen):
         results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                step3 = 0
+                return 0
         screen.fill('#A1A6B5')
+        screen.blit(plumber3, (260, 230))
         pygame.draw.rect(screen, '#D4FAB9', (275, 275, 150, 150))
         pygame.draw.rect(screen, '#060E26', (275, 275, 150, 150), 3)
 
@@ -207,7 +223,7 @@ def instruction(screen):
 
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (50, i * 60 + 50))
-        screen.blit(txt1_surface, (250, 450))
+        screen.blit(txt1_surface, (250, 430))
 
         if is_like(results) and time.time() - start > 3:
             step3 = 0
@@ -228,13 +244,16 @@ def instruction(screen):
         results, _ = get_hands(cap, handsDetector)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                step4 = 0
+                return 0
         screen.fill('#A1A6B5')
+        screen.blit(plumber4, (-350, 185))
+        screen.blit(plumber4, (75, 320))
+        screen.blit(plumber4, (500, 455))
         for i in range(len(txt_surfaces)):
-            screen.blit(txt_surfaces[i], (50, i * 60 + 50))
+            screen.blit(txt_surfaces[i], (50, i * 60 + 30))
 
         if is_like(results) and time.time() - start > 3:
-            step4 = 0
+            return 1
 
         pygame.display.flip()
         clock.tick(120)
