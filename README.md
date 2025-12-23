@@ -1,6 +1,8 @@
 
 # Plumber's Path
 
+## Main idea
+
 A multi-level game where you'll briefly become a plumber and learn how to assemble plumbing systems. You can ask for help and learn the solution to a level at any time. Once you complete one level, you'll improve your skills and immediately move on to the next. Furthermore, all controls in the game are gesture-based.
 
 ## Instruction
