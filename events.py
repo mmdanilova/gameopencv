@@ -63,13 +63,8 @@ def level(screen, ind):
         clock.tick(120)
     if win:
         you_win(screen, ind)
-        if time.time() - finish > 10 and finish != -1:
-            return None
     elif showing_ans:
-        show_ans(screen, objects, a_ans, now_time)
-        end_of_showing = time.time()
-        if time.time() - end_of_showing > 10:
-            return None
+        show_ans(screen, objects, a_ans, now_time, ind)
 
 
 def starting_message(screen):
@@ -260,10 +255,11 @@ def instruction(screen):
 
 
 def show_ans(screen, now: list[list], ans: list[list],
-             now_time):  # ресует процесс получения из данного состояния правильные трубы
+             now_time, ind):  # ресует процесс получения из данного состояния правильные трубы
     i, j = 0, 0
     clock = pygame.time.Clock()
     running = 1
+    finish = -1
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -290,9 +286,42 @@ def show_ans(screen, now: list[list], ans: list[list],
                     if now[i][j].pipe_type > 6:
                         now[i][j].pipe_type = 3
                 now[i][j].image = pic[now[i][j].pipe_type]
+        else:
+            if finish == -1:
+                finish = time.time()
+            else:
+                if time.time() - finish > 3:
+                    lets_start_again(screen, ind)
         drawing(screen, now, now_time)
         pygame.display.flip()
         clock.tick(2)
+
+    lets_start_again(screen, ind)
+
+
+def lets_start_again(screen, ind):
+    handsDetector = mp.solutions.hands.Hands()
+    cap = cv2.VideoCapture(0)
+    clock = pygame.time.Clock()
+    running = True
+    font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
+    txt = ["Now that you know the answer,","try solving this level yourself.", "Like to get started!"]
+    txt_surfaces = []
+    for i in txt:
+        txt_surfaces.append(font.render(i, True, '#060E26'))
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        results, _ = get_hands(cap, handsDetector)
+        screen.fill('#A1A6B5')
+        for i in range(len(txt_surfaces)):
+            screen.blit(txt_surfaces[i], (100, i * 60 + 50))
+        pygame.display.flip()
+        clock.tick(120)
+        if is_like(results):
+            level(screen, ind)
+    return
 
 
 def drawing(screen, objects, now_time):
