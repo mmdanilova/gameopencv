@@ -1,5 +1,3 @@
-import pygame.draw
-
 from config import *
 from detection import *
 from pics import *
@@ -9,12 +7,10 @@ import time
 from check import *
 import math
 
-def level(screen, ind):
+def level(screen, ind, handsDetector, cap):
     a = read_level(ind)
     a_copy = a.copy()
     a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(CP)
     clock = pygame.time.Clock()
     running = 1
     objects = f(a)
@@ -64,14 +60,12 @@ def level(screen, ind):
         pygame.display.flip()
         clock.tick(120)
     if win:
-        you_win(screen, ind)
+        you_win(screen, ind, handsDetector, cap)
     elif showing_ans:
         show_ans(screen, objects, a_ans, now_time, ind)
 
 
-def starting_message(screen):
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(CP)
+def starting_message(screen, handsDetector, cap):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
@@ -94,9 +88,7 @@ def starting_message(screen):
             return 1
 
 
-def you_win(screen, ind):
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(CP)
+def you_win(screen, ind, handsDetector, cap):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
@@ -134,15 +126,13 @@ def you_win(screen, ind):
         clock.tick(120)
         if is_like(results) and time.time() - start > 3:
             if ind < 5:
-                level(screen, ind + 1)
+                level(screen, ind + 1, handsDetector, cap)
             else:
                 winning_screen(screen)
     return
 
 
-def instruction(screen):
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(CP)
+def instruction(screen, handsDetector, cap):
     clock = pygame.time.Clock()
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
     step1 = 1
@@ -314,12 +304,12 @@ def show_ans(screen, now: list[list], ans: list[list],
                 finish = time.time()
             else:
                 if time.time() - finish > 1:
-                    lets_start_again(screen, ind)
+                    lets_start_again(screen, ind, handsDetector, cap)
         drawing(screen, now, now_time)
         pygame.display.flip()
         clock.tick(2)
 
-    lets_start_again(screen, ind)
+    lets_start_again(screen, ind, handsDetector, cap)
 
 def winning_screen(screen):
     clock = pygame.time.Clock()
@@ -349,9 +339,7 @@ def winning_screen(screen):
         pygame.display.flip()
         clock.tick(120)
 
-def lets_start_again(screen, ind):
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(CP)
+def lets_start_again(screen, ind, handsDetector, cap):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
@@ -372,7 +360,7 @@ def lets_start_again(screen, ind):
         if ind == 5:
             winning_screen(screen)
         elif is_like(results):
-            level(screen, ind)
+            level(screen, ind, handsDetector, cap)
             return 0
 
 
