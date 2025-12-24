@@ -62,7 +62,7 @@ def level(screen, ind, handsDetector, cap):
     if win:
         you_win(screen, ind, handsDetector, cap)
     elif showing_ans:
-        show_ans(screen, objects, a_ans, now_time, ind)
+        show_ans(screen, objects, a_ans, now_time, ind, handsDetector, cap)
 
 
 def starting_message(screen, handsDetector, cap):
@@ -269,7 +269,7 @@ def instruction(screen, handsDetector, cap):
 
 
 def show_ans(screen, now: list[list], ans: list[list],
-             now_time, ind):  # ресует процесс получения из данного состояния правильные трубы
+             now_time, ind, handsDetector, cap):  # ресует процесс получения из данного состояния правильные трубы
     i, j = 0, 0
     clock = pygame.time.Clock()
     running = 1
