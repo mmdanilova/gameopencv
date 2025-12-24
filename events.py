@@ -75,7 +75,7 @@ def starting_message(screen):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
-    txt = ["In this game you will learn how to", "correctly assemble a plumbing system", "using only gestures for control.", "Now you can study the", "instructions. To switch to the", "next step, show 2 likes!"]
+    txt = ["In this game you will learn how to", "correctly assemble a plumbing system", "using only gestures for control.", "Now you can study the", "instructions. To switch to the", "next step, show like!"]
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
@@ -100,7 +100,7 @@ def you_win(screen, ind):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
-    txt = ["Well done! you managed to pass this", "level. Show 2 likes to start the next one."]
+    txt = ["Well done! you managed to pass this", "level. Like to start the next one."]
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
@@ -251,7 +251,7 @@ def instruction(screen):
         clock.tick(120)
 
     step4 = 1
-    txt = ["     If you realize that you cannot complete", "a level, then after 10 seconds show like",
+    txt = ["     If you realize that you cannot complete", "a level, then after 10 seconds show 2 likes",
            "  and you will be shown the correct solution.",
            "If you're ready to start playing, give us a like!"]
     txt_surfaces = []
@@ -355,7 +355,7 @@ def lets_start_again(screen, ind):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
-    txt = ["Now that you know the answer,", "try solving this level yourself.", "Show 2 likes to get started!"]
+    txt = ["Now that you know the answer,", "try solving this level yourself.", "Likes to get started!"]
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
