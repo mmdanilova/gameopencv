@@ -112,6 +112,7 @@ def you_win(screen, ind):
             txt_surfaces1[i].append(font.render(j, True, '#060E26'))
     txt2 = "your skills"
     txt_surfaces2 = font.render(txt2, True, '#060E26')
+    start = time.time()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -124,14 +125,14 @@ def you_win(screen, ind):
             screen.blit(txt_surfaces1[ind][i], (100, i * 60 + 200))
         screen.blit(txt_surfaces2, (250, 470))
         pygame.draw.rect(screen, '#060E26', (500, 450, 420, 100))
-        for i in range(ind):
+        for i in range(ind+1):
             pygame.draw.rect(screen, '#BBFF01', (500, 450, 70*(i+1), 100))
         pygame.draw.rect(screen, '#060E26', (500, 450, 420, 100), 6)
         for i in range(6):
             pygame.draw.rect(screen, '#060E26', (500 + i * 70, 450, 70, 100), 3)
         pygame.display.flip()
         clock.tick(120)
-        if is_like(results):
+        if is_like(results) and time.time() - start > 3:
             if ind < 5:
                 level(screen, ind + 1)
             else:
@@ -354,7 +355,7 @@ def lets_start_again(screen, ind):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
-    txt = ["Now that you know the answer,","try solving this level yourself.", "Show 2 likes to get started!"]
+    txt = ["Now that you know the answer,", "try solving this level yourself.", "Show 2 likes to get started!"]
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))

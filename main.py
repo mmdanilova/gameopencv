@@ -1,6 +1,4 @@
-import time
 from events import *
-from check import *
 from pics import *
 
 
@@ -8,6 +6,7 @@ pygame.init()
 pygame.display.set_caption("plumbing")
 screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
 
+you_win(screen, 1)
 if not starting_message(screen):
     pygame.quit()
     exit(0)
