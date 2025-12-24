@@ -14,7 +14,7 @@ def level(screen, ind):
     a_copy = a.copy()
     a_ans = solution(len(a_copy), len(a_copy[0]), a_copy)
     handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(CP)
     clock = pygame.time.Clock()
     running = 1
     objects = f(a)
@@ -71,7 +71,7 @@ def level(screen, ind):
 
 def starting_message(screen):
     handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(CP)
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
@@ -96,7 +96,7 @@ def starting_message(screen):
 
 def you_win(screen, ind):
     handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(CP)
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
@@ -142,7 +142,7 @@ def you_win(screen, ind):
 
 def instruction(screen):
     handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(CP)
     clock = pygame.time.Clock()
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
     step1 = 1
@@ -351,7 +351,7 @@ def winning_screen(screen):
 
 def lets_start_again(screen, ind):
     handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(CP)
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)

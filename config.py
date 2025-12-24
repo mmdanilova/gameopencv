@@ -1,1 +1,2 @@
 WIDTH, HEIGHT = 1100, 600
+CP = 1
