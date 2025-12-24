@@ -36,6 +36,8 @@ plumber2 = pygame.image.load('images/plumber_pic3.png')
 plumber2 = pygame.transform.scale(plumber2, (800, 400))
 plumber3 = pygame.image.load('images/plumber_pic4.png')
 plumber3 = pygame.transform.scale(plumber3, (600, 400))
+plumber5 = pygame.image.load('images/plumber_pic5.png')
+plumber5 = pygame.transform.scale(plumber5, (700, 450))
 plumber4 = pygame.image.load('images/pipe_img.png')
 plumber4 = pygame.transform.scale(plumber4, (600, 200))
 

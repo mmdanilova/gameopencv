@@ -1,3 +1,5 @@
+import pygame.draw
+
 from config import *
 from detection import *
 from pics import *
@@ -73,7 +75,7 @@ def starting_message(screen):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
-    txt = ["In this game you will learn how to", "correctly assemble a plumbing system", "using only gestures for control.", "Now you can study the", "instructions. To switch to the", "next step, show a like!"]
+    txt = ["In this game you will learn how to", "correctly assemble a plumbing system", "using only gestures for control.", "Now you can study the", "instructions. To switch to the", "next step, show 2 likes!"]
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
@@ -98,18 +100,35 @@ def you_win(screen, ind):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
-    txt = ["   Well done! you managed to pass this", "level. Show a like to start the next one."]
+    txt = ["Well done! you managed to pass this", "level. Show 2 likes to start the next one."]
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
+
+    txt1 = [["You were able to fix your", "first plumbing, great start!"], ["You got a basic plumbing education,", "that's really cool!!"], ["You've received a secondary", "education as a plumber, now you can", "handle even more difficult tasks."], ["You received a higher education", "as a plumber, you are just a", "little bit away from perfection"], ["You are literally a super plumber,", "complete the next task and prove", "to everyone that you are the best!"]]
+    txt_surfaces1 = [[], [], [], [], []]
+    for i in range(len(txt1)):
+        for j in txt1[i]:
+            txt_surfaces1[i].append(font.render(j, True, '#060E26'))
+    txt2 = "your skills"
+    txt_surfaces2 = font.render(txt2, True, '#060E26')
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                exit(0)
         results, _ = get_hands(cap, handsDetector)
         screen.fill('#A1A6B5')
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (100, i * 60 + 50))
+        for i in range(len(txt_surfaces1[ind])):
+            screen.blit(txt_surfaces1[ind][i], (100, i * 60 + 200))
+        screen.blit(txt_surfaces2, (250, 470))
+        pygame.draw.rect(screen, '#060E26', (500, 450, 420, 100))
+        for i in range(ind):
+            pygame.draw.rect(screen, '#BBFF01', (500, 450, 70*(i+1), 100))
+        pygame.draw.rect(screen, '#060E26', (500, 450, 420, 100), 6)
+        for i in range(6):
+            pygame.draw.rect(screen, '#060E26', (500 + i * 70, 450, 70, 100), 3)
         pygame.display.flip()
         clock.tick(120)
         if is_like(results):
@@ -302,21 +321,28 @@ def show_ans(screen, now: list[list], ans: list[list],
     lets_start_again(screen, ind)
 
 def winning_screen(screen):
-    handsDetector = mp.solutions.hands.Hands()
-    cap = cv2.VideoCapture(0)
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
     txt = ["You solved all tasks,", "now you are real plumber!"]
     txt_surfaces = []
+    txt2 = "your skills"
+    txt_surfaces2 = font.render(txt2, True, '#060E26')
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(0)
-        results, _ = get_hands(cap, handsDetector)
         screen.fill('#A1A6B5')
+        screen.blit(plumber5, (200, 170))
+        screen.blit(txt_surfaces2, (250, 470))
+        pygame.draw.rect(screen, '#060E26', (500, 450, 420, 100))
+        for i in range(6):
+            pygame.draw.rect(screen, '#BBFF01', (500, 450, 70*(i+1), 100))
+        pygame.draw.rect(screen, '#060E26', (500, 450, 420, 100), 6)
+        for i in range(6):
+            pygame.draw.rect(screen, '#060E26', (500 + i * 70, 450, 70, 100), 3)
         for i in range(len(txt_surfaces)):
             screen.blit(txt_surfaces[i], (100, i * 60 + 50))
         pygame.display.flip()
@@ -328,7 +354,7 @@ def lets_start_again(screen, ind):
     clock = pygame.time.Clock()
     running = True
     font = pygame.font.Font('fonts/MPLUSRounded1c-ExtraBold.ttf', 45)
-    txt = ["Now that you know the answer,","try solving this level yourself.", "Like to get started!"]
+    txt = ["Now that you know the answer,","try solving this level yourself.", "Show 2 likes to get started!"]
     txt_surfaces = []
     for i in txt:
         txt_surfaces.append(font.render(i, True, '#060E26'))
