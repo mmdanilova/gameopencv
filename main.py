@@ -14,6 +14,5 @@ if not starting_message(screen):
 if not instruction(screen):
     pygame.quit()
     exit(0)
-
 level(screen, 0)
 pygame.quit()
