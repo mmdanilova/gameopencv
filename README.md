@@ -18,4 +18,4 @@ A multi-level game where you'll briefly become a plumber and learn how to assemb
 <img width="400" height="260" alt="image" src="https://github.com/user-attachments/assets/0764ed9b-3723-482c-a4e2-54fd30c828ba" />
 
 ## Project status
-finished in 20.05.2025
+finished in 24.12.2025
