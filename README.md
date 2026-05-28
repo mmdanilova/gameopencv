@@ -14,8 +14,8 @@ A multi-level game where you'll briefly become a plumber and learn how to assemb
 * Main functions like instruction or level are in file events.py, also project includes files: detection.py (mostly for mediapipe programs), check.py (for analysis solutions), rotation.py and pics.py (for downloading images)
 
 ## Example level
+<img width="510" height="260" alt="image" src="https://github.com/user-attachments/assets/2f5254c0-f2bb-44a8-ba1e-2051d20d5f6e" />
 <img width="400" height="260" alt="image" src="https://github.com/user-attachments/assets/0764ed9b-3723-482c-a4e2-54fd30c828ba" />
 
-
 ## Project status
-finished
+finished in 20.05.2025
